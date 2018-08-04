@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+
+import connectFour from './connectFour';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
+    const validActions = connectFour.getValidActions();
+    console.log('validActions', validActions);
     return (
       <div className="App">
         <header className="App-header">
