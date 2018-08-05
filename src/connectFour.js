@@ -1,5 +1,6 @@
 import range from 'lodash/range';
 import cloneDeep from 'lodash/cloneDeep';
+import isEmpty from 'lodash/isEmpty';
 
 export const E = '.';
 export const X = 'X';
@@ -39,6 +40,19 @@ export function performAction(state = initialState, action) {
     }
   }
   return null;
+}
+
+export function getValue(state = initialState, timePenalty = 0) {
+  const winner = getWinner(state);
+  switch (winner) {
+    case X: return 1;
+    case O: return -1;
+    default: return timePenalty;
+  }
+}
+
+export function hasFinished(state = initialState) {
+  return Boolean(getWinner(state)) || isEmpty(getValidActions(state));
 }
 
 export function getWinner(state = initialState) {
