@@ -11,12 +11,12 @@ const Board = styled.div`
   display: grid;
   font-size: ${({ size }) => (size === 'small' ? '16px' : '24px')};
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-auto-rows: ${({ size }) => (size === 'small' ? '20px' : '50px')};
+  grid-auto-rows: ${({ size }) => (size === 'small' ? '20px' : '70px')};
   grid-gap: 1px;
   justify-items: stretch;
   margin: 0 48px 0 0;
   padding: 0 0 32px 0;
-  width: ${({ size }) => (size === 'small' ? '140px' : '350px')};
+  width: ${({ size }) => (size === 'small' ? '140px' : '490px')};
 `;
 const Cell = styled.div`
   align-items: center;
@@ -28,17 +28,26 @@ const CellLabel = styled.div`
   display: block;
   flex: 1;
 `;
+const CellValue = styled.div`
+  bottom: 3px;
+  font-size: 12px;
+  left: 0;
+  position: absolute;
+  right: 0;
+`;
 
 const ConnectFourBoard = ({
   gameState,
   gameResult,
   size,
 }) => {
-  const values = gameResult.children.map(n => n.deepValue / n.deepCount);
+  const nextActionValues = gameResult.children.map(n => n.deepValue / n.deepCount);
   return (
     <Board size={size}>
       { gameState.board.map((row, i) => row.map((v, j) => {
-        const cellBgColor = getCellBgColor(values[j]);
+        const nextActionValue = nextActionValues[j];
+        const cellBgColor = getCellBgColor(nextActionValue);
+        const lastRow = i === 5;
         return (
           <Cell
             key={`connect-four-cell-${i}-${j}`}
@@ -47,6 +56,11 @@ const ConnectFourBoard = ({
             <CellLabel>
               {v}
             </CellLabel>
+            { lastRow && (
+              <CellValue>
+                {nextActionValue.toFixed(3)}
+              </CellValue>
+            )}
           </Cell>
         );
       }))}

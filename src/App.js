@@ -1,6 +1,5 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/jsx-one-expression-per-line */
-
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
