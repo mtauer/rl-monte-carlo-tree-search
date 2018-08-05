@@ -71,10 +71,10 @@ export function getWinner(state = initialState) {
     lines.push(range(ROWS_COUNT).map(i => [i, 0 - diff + col + i]));
     lines.push(range(ROWS_COUNT).map(i => [i, COLUMNS_COUNT - 1 + diff - col - i]));
   });
-  return getWinnerOfLines(state, lines);
+  return getWinnerForLines(state, lines);
 }
 
-function getWinnerOfLines(state, lines) {
+function getWinnerForLines(state, lines) {
   const { board } = state;
   let winner = null;
   lines.forEach((line) => {
@@ -94,21 +94,21 @@ function getWinnerOfLines(state, lines) {
       if (value === connect.player) {
         connect.count += 1;
       } else if (value === E) {
-        trackConnectionMax();
+        updateMaximum();
         connect.player = null;
         connect.count = 0;
       } else {
-        trackConnectionMax();
+        updateMaximum();
         connect.player = value;
         connect.count = 1;
       }
     });
-    trackConnectionMax();
+    updateMaximum();
     if (connect.maxCount >= CONNECT_COUNT) {
       winner = connect.maxPlayer;
     }
 
-    function trackConnectionMax() {
+    function updateMaximum() {
       if (connect.count > connect.maxCount) {
         connect.maxCount = connect.count;
         connect.maxPlayer = connect.player;
