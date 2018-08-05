@@ -8,7 +8,7 @@ import repeat from 'lodash/repeat';
 export default function monteCarloTreeSearch(game, state) {
   const root = new MonteCarloTreeSearchNode(null, state);
   root.setChildren(getNewNodes(game, state));
-  range(20000).forEach(() => {
+  range(1000).forEach(() => {
     let currentNode;
     // 1. Tree traversal
     currentNode = traverseTree(root);
