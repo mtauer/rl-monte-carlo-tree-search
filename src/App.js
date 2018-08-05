@@ -4,14 +4,13 @@
 import React, { Component } from 'react';
 
 import * as connectFour from './connectFour';
+import monteCarloTreeSearch from './monteCarloTreeSearch';
 import './App.css';
 
 class App extends Component {
   render() {
-    const validActions = connectFour.getValidActions();
-    console.log('validActions', validActions);
-    const winner = connectFour.getWinner();
-    console.log('winner', winner);
+    const result = monteCarloTreeSearch(connectFour, connectFour.initialState);
+    console.log('result', result);
     return (
       <h1>Monte Carlo Tree Search for Connect Four</h1>
     );

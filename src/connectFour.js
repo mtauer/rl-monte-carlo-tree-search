@@ -9,7 +9,7 @@ export const O = 'O';
 const ROWS_COUNT = 6;
 const COLUMNS_COUNT = 7;
 const CONNECT_COUNT = 4;
-const initialState = {
+export const initialState = {
   board: [
     [E, E, E, E, E, E, E],
     [E, E, E, E, E, E, E],
@@ -51,7 +51,7 @@ export function getValue(state = initialState, timePenalty = 0) {
   }
 }
 
-export function hasFinished(state = initialState) {
+export function isFinished(state = initialState) {
   return Boolean(getWinner(state)) || isEmpty(getValidActions(state));
 }
 
