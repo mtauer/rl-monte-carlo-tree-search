@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import * as connectFour from './connectFour';
 import monteCarloTreeSearch from './monteCarloTreeSearch';
 import ConnectFourBoard from './ConnectFourBoard';
+import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
 import './App.css';
 
 const Container = styled.div`
@@ -30,11 +31,20 @@ class App extends Component {
     const initialGameState = connectFour.initialState;
     return (
       <Container>
-        <Title>Monte Carlo Tree Search for Connect Four</Title>
+        <Title>Monte Carlo Tree Search for Connect 4</Title>
         <Section>
           <ConnectFourBoard
             gameState={initialGameState}
             gameResult={result}
+          />
+          <ConnectFourBoardAnalysis
+            values={result.children.map(n => n.deepCount)}
+            color="#fca982"
+          />
+          <ConnectFourBoardAnalysis
+            values={result.children.map(n => n.ucb1)}
+            color="#91bfdb"
+            formatFunc={f => f.toFixed(3)}
           />
         </Section>
       </Container>
