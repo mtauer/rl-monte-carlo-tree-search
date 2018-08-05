@@ -10,6 +10,8 @@ class App extends Component {
   render() {
     const validActions = connectFour.getValidActions();
     console.log('validActions', validActions);
+    const winner = connectFour.getWinner();
+    console.log('winner', winner);
     return (
       <h1>Monte Carlo Tree Search for Connect Four</h1>
     );
