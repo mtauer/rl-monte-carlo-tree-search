@@ -15,7 +15,7 @@ const Board = styled.div`
   grid-gap: 1px;
   justify-items: stretch;
   margin: 0 48px 0 0;
-  padding: 0 0 8px 0;
+  padding: 0 0 32px 0;
   width: ${({ size }) => (size === 'small' ? '140px' : '490px')};
 `;
 const Cell = styled.div`

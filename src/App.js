@@ -1,10 +1,12 @@
-/* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import * as connectFour from './connectFour';
 import monteCarloTreeSearch from './monteCarloTreeSearch';
+import { getInitialGameState } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
 import './App.css';
@@ -24,32 +26,44 @@ const Title = styled.h1`
   margin: 0;
   padding: 0 0 16px 0;
 `;
+const Label = styled.label`
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 0 0 8px 0;
+`;
 
-class App extends Component {
-  render() {
-    const result = monteCarloTreeSearch(connectFour, connectFour.initialState);
-    const initialGameState = connectFour.initialState;
-    return (
-      <Container>
-        <Title>Monte Carlo Tree Search for Connect 4</Title>
-        <Section>
-          <ConnectFourBoard
-            gameState={initialGameState}
-            gameResult={result}
-          />
-          <ConnectFourBoardAnalysis
-            values={result.children.map(n => n.deepCount)}
-            color="#fca982"
-          />
-          <ConnectFourBoardAnalysis
-            values={result.children.map(n => n.ucb1)}
-            color="#91bfdb"
-            formatFunc={f => f.toFixed(3)}
-          />
-        </Section>
-      </Container>
-    );
-  }
-}
+const App = ({ initialGameState }) => {
+  const result = monteCarloTreeSearch(connectFour, initialGameState);
+  return (
+    <Container>
+      <Title>Monte Carlo Tree Search for Connect 4</Title>
+      <Section>
+        <ConnectFourBoard
+          gameState={initialGameState}
+          gameResult={result}
+        />
+        <Label>Number of simulations per action</Label>
+        <ConnectFourBoardAnalysis
+          values={result.children.map(n => n.deepCount)}
+          color="#fca982"
+        />
+        <Label>UCB1 value per action (shows how likely futher simulations for an action are)</Label>
+        <ConnectFourBoardAnalysis
+          values={result.children.map(n => n.ucb1)}
+          color="#91bfdb"
+          formatFunc={f => f.toFixed(3)}
+        />
+      </Section>
+    </Container>
+  );
+};
+App.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  initialGameState: PropTypes.object.isRequired,
+};
 
-export default App;
+const mapStateToProps = state => ({
+  initialGameState: getInitialGameState(state),
+});
+export default connect(mapStateToProps)(App);
