@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import * as connectFour from './connectFour';
 import monteCarloTreeSearch from './monteCarloTreeSearch';
+import ConnectFourBoard from './ConnectFourBoard';
 import './App.css';
 
 const Container = styled.div`
@@ -14,6 +15,9 @@ const Container = styled.div`
   max-width: 800px;
   min-height: 100vh;
   padding: 32px 48px;
+`;
+const Section = styled.div`
+  padding: 0 0 32px 0;
 `;
 const Title = styled.h1`
   font-family: 'IBM Plex Sans', sans-serif;
@@ -24,10 +28,16 @@ const Title = styled.h1`
 class App extends Component {
   render() {
     const result = monteCarloTreeSearch(connectFour, connectFour.initialState);
-    console.log('result', result);
+    const initialGameState = connectFour.initialState;
     return (
       <Container>
         <Title>Monte Carlo Tree Search for Connect Four</Title>
+        <Section>
+          <ConnectFourBoard
+            gameState={initialGameState}
+            gameResult={result}
+          />
+        </Section>
       </Container>
     );
   }
