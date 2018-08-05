@@ -1,3 +1,6 @@
+import { interval } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { E, X } from './connectFour';
 
 const initialState = {
@@ -22,4 +25,10 @@ export default function monteCarloTreeSearchReducer(state = initialState, action
 
 export function getInitialGameState(state) {
   return state.initialGameState;
+}
+
+export function monteCarloTreeSearchEpic() {
+  return interval(1000).pipe(
+    map(() => ({ type: 'UNKNOWN_ACTION' })),
+  );
 }

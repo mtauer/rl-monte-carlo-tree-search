@@ -3,7 +3,6 @@ import isEmpty from 'lodash/isEmpty';
 import sample from 'lodash/sample';
 import range from 'lodash/range';
 import maxBy from 'lodash/maxBy';
-import repeat from 'lodash/repeat';
 
 export default function monteCarloTreeSearch(game, state) {
   const root = new MonteCarloTreeSearchNode(null, state);
@@ -104,11 +103,5 @@ class MonteCarloTreeSearchNode {
 
   getFirstChildren() {
     return this.children[0];
-  }
-
-  print(depth = 0) {
-    const prefix = depth === 0 ? '' : `${repeat('  ', depth - 1)}+-`;
-    console.log(prefix, 'a', this.action ? this.action.index : '-', 'v', this.deepValue / this.deepCount, 'ucb1', this.ucb1);
-    this.children.forEach((n) => { n.print(depth + 1); });
   }
 }
