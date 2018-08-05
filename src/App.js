@@ -1,7 +1,9 @@
+/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/jsx-one-expression-per-line */
+
 import React, { Component } from 'react';
 
-import connectFour from './connectFour';
-import logo from './logo.svg';
+import * as connectFour from './connectFour';
 import './App.css';
 
 class App extends Component {
@@ -9,15 +11,7 @@ class App extends Component {
     const validActions = connectFour.getValidActions();
     console.log('validActions', validActions);
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <h1>Monte Carlo Tree Search for Connect Four</h1>
     );
   }
 }
