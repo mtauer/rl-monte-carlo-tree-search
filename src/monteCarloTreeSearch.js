@@ -3,6 +3,11 @@ import isEmpty from 'lodash/isEmpty';
 import sample from 'lodash/sample';
 import maxBy from 'lodash/maxBy';
 
+const options = {
+  learningTimeInMs: 100,
+  ucb1ExplorationParameter: 5, // originally it's sqrt(2)
+};
+
 export default function monteCarloTreeSearch(game, state, initialRoot) {
   const startTime = performance.now();
   let root;
@@ -12,7 +17,7 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     root = new MonteCarloTreeSearchNode(null, state);
     root.setChildren(getNewNodes(game, state));
   }
-  while ((performance.now() - startTime) < 100) {
+  while ((performance.now() - startTime) < options.learningTimeInMs) {
     let currentNode;
     // 1. Tree traversal
     currentNode = traverseTree(root);
@@ -77,7 +82,7 @@ function calculateUCB1Values(node, root = node) {
     const v = node.deepValue; // sum of subtree value estimation
     const n = node.deepCount; // total number of subtree value estimations
     const N = root.deepCount; // total number of all value estimations
-    const c = 4 * Math.sqrt(2); // exploration parameter
+    const c = options.ucb1ExplorationParameter; // exploration parameter
     const meanV = v / n; // average subtree value estimation
     const ucb1 = meanV + c * Math.sqrt(Math.log(N) / n);
     node.ucb1 = ucb1;
