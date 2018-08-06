@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { scaleLinear } from 'd3-scale';
 import { rgb } from 'd3-color';
 import { interpolateHcl } from 'd3-interpolate';
+import fromPairs from 'lodash/fromPairs';
 
 const Board = styled.div`
   display: grid;
@@ -43,14 +44,15 @@ const ConnectFourBoard = ({
   size,
   onCellClick,
 }) => {
-  const nextActionValues = gameResult
-    ? gameResult.children.map(n => n.deepValue / n.deepCount)
-    : [];
+  const nextActionNodes = gameResult ? gameResult.children : [];
+  const nextActionValuesMap = fromPairs(
+    nextActionNodes.map(n => [n.action.index, n.deepValue / n.deepCount]),
+  );
   return (
     <Board size={size}>
       { gameState.board.map((row, i) => row.map((v, j) => {
-        const nextActionValue = nextActionValues[j];
-        const cellBgColor = getCellBgColor(nextActionValue);
+        const nextActionValue = nextActionValuesMap[j];
+        const cellBgColor = nextActionValue !== undefined ? getCellBgColor(nextActionValue) : '#e6e6e6';
         const lastRow = i === 5;
         return (
           <Cell

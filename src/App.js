@@ -3,6 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import fromPairs from 'lodash/fromPairs';
+import range from 'lodash/range';
 
 import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
@@ -31,29 +33,40 @@ const Label = styled.label`
   padding: 0 0 8px 0;
 `;
 
-const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => (
-  <Container>
-    <Title>Monte Carlo Tree Search for Connect 4</Title>
-    <Section>
-      <ConnectFourBoard
-        gameState={gameState}
-        gameResult={searchTreeRoot}
-        onCellClick={onBoardCellClick}
-      />
-      <Label>Number of simulations per action</Label>
-      <ConnectFourBoardAnalysis
-        values={searchTreeRoot ? searchTreeRoot.children.map(n => n.deepCount) : []}
-        color="#fca982"
-      />
-      <Label>UCB1 value per action (shows for which action the algorithm will simulate more)</Label>
-      <ConnectFourBoardAnalysis
-        values={searchTreeRoot ? searchTreeRoot.children.map(n => n.ucb1) : []}
-        color="#91bfdb"
-        formatFunc={f => f.toFixed(3)}
-      />
-    </Section>
-  </Container>
-);
+const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
+  const nextActionNodes = searchTreeRoot ? searchTreeRoot.children : [];
+  const nextActionsCountMap = fromPairs(
+    nextActionNodes.map(n => [n.action.index, n.deepCount]),
+  );
+  const nextActionsUcb1Map = fromPairs(
+    nextActionNodes.map(n => [n.action.index, n.ucb1]),
+  );
+  return (
+    <Container>
+      <Title>Monte Carlo Tree Search for Connect 4</Title>
+      <Section>
+        <ConnectFourBoard
+          gameState={gameState}
+          gameResult={searchTreeRoot}
+          onCellClick={onBoardCellClick}
+        />
+        <Label>Number of simulations per action</Label>
+        <ConnectFourBoardAnalysis
+          values={range(7).map(i => nextActionsCountMap[i])}
+          color="#fca982"
+        />
+        <Label>
+          UCB1 value per action (shows for which action the algorithm will simulate more)
+        </Label>
+        <ConnectFourBoardAnalysis
+          values={range(7).map(i => nextActionsUcb1Map[i])}
+          color="#91bfdb"
+          formatFunc={f => f.toFixed(3)}
+        />
+      </Section>
+    </Container>
+  );
+};
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameState: PropTypes.object.isRequired,

@@ -39,17 +39,16 @@ const ConnectFourBoardAnalysis = ({
   color,
   formatFunc,
 }) => {
-  // const nextActionsCount = gameResult.children.map(n => n.deepCount);
   const maxValue = max(values);
   return (
     <Chart>
       { values.map((v, i) => {
-        const barHeight = v < 0 ? 0 : 70 * v / maxValue;
+        const barHeight = v === undefined || v < 0 ? 0 : 70 * v / maxValue;
         return (
           <Cell key={`next-action-bar-${i}`}>
             <CellBar style={{ height: `${barHeight}px`, backgroundColor: color }} />
             <CellValue>
-              {formatFunc(v)}
+              {v !== undefined ? formatFunc(v) : ''}
             </CellValue>
           </Cell>
         );
@@ -58,8 +57,6 @@ const ConnectFourBoardAnalysis = ({
   );
 };
 ConnectFourBoardAnalysis.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  // gameResult: PropTypes.object.isRequired,
   values: PropTypes.arrayOf(PropTypes.number).isRequired,
   color: PropTypes.string.isRequired,
   formatFunc: PropTypes.func,
