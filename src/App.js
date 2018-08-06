@@ -38,6 +38,7 @@ const App = ({ initialGameState, searchTreeRoot }) => (
       <ConnectFourBoard
         gameState={initialGameState}
         gameResult={searchTreeRoot}
+        onCellClick={(row, col) => { console.log('onCellClick', row, col); }}
       />
       <Label>Number of simulations per action</Label>
       <ConnectFourBoardAnalysis
@@ -57,7 +58,10 @@ App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   initialGameState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  searchTreeRoot: PropTypes.object.isRequired,
+  searchTreeRoot: PropTypes.object,
+};
+App.defaultProps = {
+  searchTreeRoot: null,
 };
 
 const mapStateToProps = state => ({

@@ -20,6 +20,7 @@ const Board = styled.div`
 `;
 const Cell = styled.div`
   align-items: center;
+  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
   display: flex;
   position: relative;
   text-align: center;
@@ -40,6 +41,7 @@ const ConnectFourBoard = ({
   gameState,
   gameResult,
   size,
+  onCellClick,
 }) => {
   const nextActionValues = gameResult
     ? gameResult.children.map(n => n.deepValue / n.deepCount)
@@ -54,6 +56,8 @@ const ConnectFourBoard = ({
           <Cell
             key={`connect-four-cell-${i}-${j}`}
             style={{ backgroundColor: cellBgColor }}
+            isClickable={Boolean(onCellClick)}
+            onClick={() => onCellClick && onCellClick(i, j)}
           >
             <CellLabel>
               {v}
@@ -73,11 +77,14 @@ ConnectFourBoard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  gameResult: PropTypes.object.isRequired,
+  gameResult: PropTypes.object,
   size: PropTypes.string,
+  onCellClick: PropTypes.func,
 };
 ConnectFourBoard.defaultProps = {
+  gameResult: null,
   size: '',
+  onCellClick: null,
 };
 
 function getCellBgColor(value) {
