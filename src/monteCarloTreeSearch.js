@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import isEmpty from 'lodash/isEmpty';
 import sample from 'lodash/sample';
-import range from 'lodash/range';
 import maxBy from 'lodash/maxBy';
 
 export default function monteCarloTreeSearch(game, state, initialRoot) {
+  const startTime = performance.now();
   let root;
   if (initialRoot) {
     root = initialRoot;
@@ -12,7 +12,7 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     root = new MonteCarloTreeSearchNode(null, state);
     root.setChildren(getNewNodes(game, state));
   }
-  range(100).forEach(() => {
+  while ((performance.now() - startTime) < 100) {
     let currentNode;
     // 1. Tree traversal
     currentNode = traverseTree(root);
@@ -23,7 +23,7 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     // 4. Back propagation
     backPropagateValue(currentNode, rolloutValue);
     calculateUCB1Values(root);
-  });
+  }
   return root;
 }
 
