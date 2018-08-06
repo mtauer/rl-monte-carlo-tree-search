@@ -44,7 +44,7 @@ const ConnectFourBoardAnalysis = ({
   return (
     <Chart>
       { values.map((v, i) => {
-        const barHeight = 70 * v / maxValue;
+        const barHeight = v < 0 ? 0 : 70 * v / maxValue;
         return (
           <Cell key={`next-action-bar-${i}`}>
             <CellBar style={{ height: `${barHeight}px`, backgroundColor: color }} />

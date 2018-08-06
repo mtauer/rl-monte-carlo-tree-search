@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import * as connectFour from './connectFour';
-import monteCarloTreeSearch from './monteCarloTreeSearch';
-import { getInitialGameState } from './monteCarloTreeSearchRedux';
+import { getInitialGameState, getSearchTreeRoot } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
 import './App.css';
@@ -33,24 +31,24 @@ const Label = styled.label`
   padding: 0 0 8px 0;
 `;
 
-const App = ({ initialGameState }) => {
-  const result = monteCarloTreeSearch(connectFour, initialGameState);
+const App = ({ initialGameState, searchTreeRoot }) => {
+  console.log('App');
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
       <Section>
         <ConnectFourBoard
           gameState={initialGameState}
-          gameResult={result}
+          gameResult={searchTreeRoot}
         />
         <Label>Number of simulations per action</Label>
         <ConnectFourBoardAnalysis
-          values={result.children.map(n => n.deepCount)}
+          values={searchTreeRoot ? searchTreeRoot.children.map(n => n.deepCount) : []}
           color="#fca982"
         />
         <Label>UCB1 value per action (shows how likely futher simulations for an action are)</Label>
         <ConnectFourBoardAnalysis
-          values={result.children.map(n => n.ucb1)}
+          values={searchTreeRoot ? searchTreeRoot.children.map(n => n.ucb1) : []}
           color="#91bfdb"
           formatFunc={f => f.toFixed(3)}
         />
@@ -61,9 +59,12 @@ const App = ({ initialGameState }) => {
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   initialGameState: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  searchTreeRoot: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
   initialGameState: getInitialGameState(state),
+  searchTreeRoot: getSearchTreeRoot(state),
 });
 export default connect(mapStateToProps)(App);

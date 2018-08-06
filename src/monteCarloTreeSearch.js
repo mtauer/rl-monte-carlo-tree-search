@@ -4,10 +4,15 @@ import sample from 'lodash/sample';
 import range from 'lodash/range';
 import maxBy from 'lodash/maxBy';
 
-export default function monteCarloTreeSearch(game, state) {
-  const root = new MonteCarloTreeSearchNode(null, state);
-  root.setChildren(getNewNodes(game, state));
-  range(1000).forEach(() => {
+export default function monteCarloTreeSearch(game, state, initialRoot) {
+  let root;
+  if (initialRoot) {
+    root = initialRoot;
+  } else {
+    root = new MonteCarloTreeSearchNode(null, state);
+    root.setChildren(getNewNodes(game, state));
+  }
+  range(100).forEach(() => {
     let currentNode;
     // 1. Tree traversal
     currentNode = traverseTree(root);

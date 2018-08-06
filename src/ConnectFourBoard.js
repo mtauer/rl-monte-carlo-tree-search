@@ -41,7 +41,9 @@ const ConnectFourBoard = ({
   gameResult,
   size,
 }) => {
-  const nextActionValues = gameResult.children.map(n => n.deepValue / n.deepCount);
+  const nextActionValues = gameResult
+    ? gameResult.children.map(n => n.deepValue / n.deepCount)
+    : [];
   return (
     <Board size={size}>
       { gameState.board.map((row, i) => row.map((v, j) => {
@@ -58,7 +60,7 @@ const ConnectFourBoard = ({
             </CellLabel>
             { lastRow && (
               <CellValue>
-                {nextActionValue.toFixed(3)}
+                {nextActionValue !== undefined ? nextActionValue.toFixed(3) : ''}
               </CellValue>
             )}
           </Cell>
