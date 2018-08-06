@@ -6,7 +6,7 @@ import first from 'lodash/first';
 
 const options = {
   learningTimeInMs: 100,
-  ucb1ExplorationParameter: Math.sqrt(2), // originally it's sqrt(2)
+  ucb1ExplorationParameter: Math.sqrt(2), // originally it's Math.sqrt(2)
 };
 
 export default function monteCarloTreeSearch(game, state, initialRoot) {
@@ -28,7 +28,7 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     const rolloutValue = getRolloutValue(game, currentNode.state);
     // 4. Back propagation
     backPropagateValue(currentNode, rolloutValue);
-    calculateUCB1Values(root);
+    calculateUCB1Values(root, undefined, state.currentPlayer === game.O);
   }
   return root;
 }
@@ -81,7 +81,7 @@ function backPropagateValue(node, value) {
   if (node.parent) { backPropagateValue(node.parent, value); }
 }
 
-function calculateUCB1Values(node, root = node) {
+function calculateUCB1Values(node, root = node, maximize = true) {
   // See: https://en.wikipedia.org/wiki/Monte_Carlo_tree_search#Exploration_and_exploitation
   if (node.isFinished) {
     node.ubc1 = Number.NEGATIVE_INFINITY;
@@ -92,11 +92,11 @@ function calculateUCB1Values(node, root = node) {
     const n = node.deepCount; // total number of subtree value estimations
     const N = root.deepCount; // total number of all value estimations
     const c = options.ucb1ExplorationParameter; // exploration parameter
-    const meanV = v / n; // average subtree value estimation
+    const meanV = maximize ? v / n : 1 - v / n; // average subtree value estimation
     const ucb1 = meanV + c * Math.sqrt(Math.log(N) / n);
     node.ucb1 = ucb1;
   }
-  node.children.forEach((child) => { calculateUCB1Values(child, root); });
+  node.children.forEach((child) => { calculateUCB1Values(child, root, !maximize); });
 }
 
 class MonteCarloTreeSearchNode {
