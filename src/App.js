@@ -45,7 +45,7 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => (
         values={searchTreeRoot ? searchTreeRoot.children.map(n => n.deepCount) : []}
         color="#fca982"
       />
-      <Label>UCB1 value per action (shows for which action the algorithm will simulate next)</Label>
+      <Label>UCB1 value per action (shows for which action the algorithm will simulate more)</Label>
       <ConnectFourBoardAnalysis
         values={searchTreeRoot ? searchTreeRoot.children.map(n => n.ucb1) : []}
         color="#91bfdb"
