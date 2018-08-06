@@ -31,31 +31,28 @@ const Label = styled.label`
   padding: 0 0 8px 0;
 `;
 
-const App = ({ initialGameState, searchTreeRoot }) => {
-  console.log('App');
-  return (
-    <Container>
-      <Title>Monte Carlo Tree Search for Connect 4</Title>
-      <Section>
-        <ConnectFourBoard
-          gameState={initialGameState}
-          gameResult={searchTreeRoot}
-        />
-        <Label>Number of simulations per action</Label>
-        <ConnectFourBoardAnalysis
-          values={searchTreeRoot ? searchTreeRoot.children.map(n => n.deepCount) : []}
-          color="#fca982"
-        />
-        <Label>UCB1 value per action (shows how likely futher simulations for an action are)</Label>
-        <ConnectFourBoardAnalysis
-          values={searchTreeRoot ? searchTreeRoot.children.map(n => n.ucb1) : []}
-          color="#91bfdb"
-          formatFunc={f => f.toFixed(3)}
-        />
-      </Section>
-    </Container>
-  );
-};
+const App = ({ initialGameState, searchTreeRoot }) => (
+  <Container>
+    <Title>Monte Carlo Tree Search for Connect 4</Title>
+    <Section>
+      <ConnectFourBoard
+        gameState={initialGameState}
+        gameResult={searchTreeRoot}
+      />
+      <Label>Number of simulations per action</Label>
+      <ConnectFourBoardAnalysis
+        values={searchTreeRoot ? searchTreeRoot.children.map(n => n.deepCount) : []}
+        color="#fca982"
+      />
+      <Label>UCB1 value per action (shows for which action the algorithm will simulate next)</Label>
+      <ConnectFourBoardAnalysis
+        values={searchTreeRoot ? searchTreeRoot.children.map(n => n.ucb1) : []}
+        color="#91bfdb"
+        formatFunc={f => f.toFixed(3)}
+      />
+    </Section>
+  </Container>
+);
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   initialGameState: PropTypes.object.isRequired,
