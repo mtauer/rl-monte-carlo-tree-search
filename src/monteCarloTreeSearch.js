@@ -6,7 +6,7 @@ import first from 'lodash/first';
 
 const options = {
   learningTimeInMs: 100,
-  ucb1ExplorationParameter: 5, // originally it's sqrt(2)
+  ucb1ExplorationParameter: Math.sqrt(2), // originally it's sqrt(2)
 };
 
 export default function monteCarloTreeSearch(game, state, initialRoot) {
