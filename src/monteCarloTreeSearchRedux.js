@@ -8,7 +8,7 @@ import monteCarloTreeSearch from './monteCarloTreeSearch';
 const { E, X } = connectFour;
 
 const initialState = {
-  initialGameState: {
+  gameState: {
     board: [
       [E, E, E, E, E, E, E],
       [E, E, E, E, E, E, E],
@@ -24,9 +24,14 @@ const initialState = {
 
 const PREFIX = 'monteCarloTreeSearch/';
 export const SET_SEARCH_TREE_ROOT = `${PREFIX}SET_SEARCH_TREE_ROOT`;
+export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`; // with action we mean a game/MDP action
 
 export function setSearchTreeRootAction(searchTreeRoot) {
   return { type: SET_SEARCH_TREE_ROOT, searchTreeRoot };
+}
+
+export function performGameActionAction(gameAction) {
+  return { type: PERFORM_GAME_ACTION, gameAction };
 }
 
 export default function monteCarloTreeSearchReducer(state = initialState, action) {
@@ -38,12 +43,23 @@ export default function monteCarloTreeSearchReducer(state = initialState, action
         searchTreeRoot,
       };
     }
+    case PERFORM_GAME_ACTION: {
+      const { gameState } = state;
+      const { gameAction } = action;
+      const newGameState = connectFour.performAction(gameState, gameAction);
+      const newSearchTreeRoot = null;
+      return {
+        ...state,
+        gameState: newGameState,
+        searchTreeRoot: newSearchTreeRoot,
+      };
+    }
     default: return state;
   }
 }
 
-export function getInitialGameState(state) {
-  return state.initialGameState;
+export function getGameState(state) {
+  return state.gameState;
 }
 
 export function getSearchTreeRoot(state) {
@@ -53,8 +69,8 @@ export function getSearchTreeRoot(state) {
 export function monteCarloTreeSearchEpic(action$, state$) {
   return interval(150).pipe(
     map(() => {
-      const { initialGameState, searchTreeRoot } = state$.value;
-      const root = monteCarloTreeSearch(connectFour, initialGameState, searchTreeRoot);
+      const { gameState, searchTreeRoot } = state$.value;
+      const root = monteCarloTreeSearch(connectFour, gameState, searchTreeRoot);
       return setSearchTreeRootAction(cloneDeep(root));
     }),
   );

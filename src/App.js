@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { getInitialGameState, getSearchTreeRoot } from './monteCarloTreeSearchRedux';
+import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
 import './App.css';
@@ -31,14 +31,14 @@ const Label = styled.label`
   padding: 0 0 8px 0;
 `;
 
-const App = ({ initialGameState, searchTreeRoot }) => (
+const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => (
   <Container>
     <Title>Monte Carlo Tree Search for Connect 4</Title>
     <Section>
       <ConnectFourBoard
-        gameState={initialGameState}
+        gameState={gameState}
         gameResult={searchTreeRoot}
-        onCellClick={(row, col) => { console.log('onCellClick', row, col); }}
+        onCellClick={onBoardCellClick}
       />
       <Label>Number of simulations per action</Label>
       <ConnectFourBoardAnalysis
@@ -56,16 +56,20 @@ const App = ({ initialGameState, searchTreeRoot }) => (
 );
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  initialGameState: PropTypes.object.isRequired,
+  gameState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   searchTreeRoot: PropTypes.object,
+  onBoardCellClick: PropTypes.func.isRequired,
 };
 App.defaultProps = {
   searchTreeRoot: null,
 };
 
 const mapStateToProps = state => ({
-  initialGameState: getInitialGameState(state),
+  gameState: getGameState(state),
   searchTreeRoot: getSearchTreeRoot(state),
 });
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  onBoardCellClick: (row, col) => dispatch(performGameActionAction({ index: col })),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);
