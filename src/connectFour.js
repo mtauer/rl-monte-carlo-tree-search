@@ -47,7 +47,7 @@ export function getValue(state = initialState, timePenalty = 0) {
   switch (winner) {
     case X: return 1;
     case O: return -1;
-    default: return isEmpty(getValidActions(state)) ? -1 : timePenalty;
+    default: return isEmpty(getValidActions(state)) ? -0.5 : timePenalty;
   }
 }
 
