@@ -1,5 +1,5 @@
 import { interval } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import cloneDeep from 'lodash/cloneDeep';
 
 import * as connectFour from './connectFour';
@@ -73,5 +73,6 @@ export function monteCarloTreeSearchEpic(action$, state$) {
       const root = monteCarloTreeSearch(connectFour, gameState, searchTreeRoot);
       return setSearchTreeRootAction(cloneDeep(root));
     }),
+    filter(() => false),
   );
 }
