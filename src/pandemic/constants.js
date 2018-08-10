@@ -2,6 +2,7 @@ export const DISEASE_BLUE = 'Blue';
 export const DISEASE_YELLOW = 'Yellow';
 export const DISEASE_BLACK = 'Black';
 export const DISEASE_RED = 'Red';
+
 export const diseases = [DISEASE_BLUE, DISEASE_YELLOW, DISEASE_BLACK, DISEASE_RED];
 
 export const locations = [

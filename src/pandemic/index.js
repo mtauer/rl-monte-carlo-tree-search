@@ -3,25 +3,23 @@ import shuffle from 'lodash/shuffle';
 import slice from 'lodash/slice';
 import chunk from 'lodash/chunk';
 import flatten from 'lodash/flatten';
+import range from 'lodash/range';
 
 import {
   diseases, locations, routes, outbreaks,
 } from './constants';
 
 export const locationsMap = getLocationsMap();
-export const initialState = {
-  board: prepareBoard(),
-};
+export const players = getPlayers();
+export const initialState = prepareState();
 
-export function prepareBoard() {
-  let board = {
-    players: [{ id: 0 }, { id: 1 }],
-  };
-  // TODO prepare resources (players, research centers, research status)
-  board = preparePlayerCards(board);
-  board = prepareInfectionCards(board);
-  // TODO prepare first infections
-  return board;
+export function prepareState() {
+  let state = {};
+  state = prepareResources(state);
+  state = preparePlayerCards(state);
+  state = prepareInfectionCards(state);
+  state = prepareFirstInfections(state);
+  return state;
 }
 
 function getLocationsMap() {
@@ -29,7 +27,6 @@ function getLocationsMap() {
   const locationsById = fromPairs(locations.map(l => [l.id, {
     ...l,
     connectedLocations: [],
-    cubes: fromPairs(diseases.map(d => [d, 0])),
   }]));
   routes.forEach(([name1, name2]) => {
     const location1 = locationsById[locationIdsByName[name1]];
@@ -37,19 +34,34 @@ function getLocationsMap() {
     location1.connectedLocations.push(location2.id);
     location2.connectedLocations.push(location1.id);
   });
-
   return locationsById;
 }
 
-function preparePlayerCards(board) {
+function getPlayers() {
+  return range(2).map(i => ({ id: i }));
+}
+
+function prepareResources(state) {
+  // Position all players and a research center in Atlanta
+  return {
+    ...state,
+    playerPositions: fromPairs(players.map(p => [p.id, 3])),
+    researchCenters: [3],
+    research: {},
+    currentPlayer: players[0].id,
+    currentMovesCount: 4,
+  };
+}
+
+function preparePlayerCards(state) {
   // Shuffle the location player cards
   let cards = shuffle(locations.map(l => l.id));
   // Give 2 players 4 cards each, 3 player 3 cards or 4 players 2 cards
   const cardsPerPlayer = 4;
-  const players = board.players.map((p, i) => ({
-    ...p,
-    playerCards: slice(cards, i * cardsPerPlayer, (i + 1) * cardsPerPlayer),
-  }));
+  const playerCards = fromPairs(players.map((p, i) => [
+    p.id,
+    slice(cards, i * cardsPerPlayer, (i + 1) * cardsPerPlayer),
+  ]));
   cards = slice(cards, players.length * cardsPerPlayer);
   // Shuffle the outpreak cards into the location player cards
   // Note: location ids and outbreaks ids as union are unique
@@ -59,17 +71,51 @@ function preparePlayerCards(board) {
   });
   cards = flatten(cardStacks.map(stack => shuffle(stack)));
   return {
-    ...board,
+    ...state,
     unplayedPlayerCards: cards,
-    players,
+    playerCards,
   };
 }
 
-function prepareInfectionCards(board) {
+function prepareInfectionCards(state) {
   // Shuffle the infection cards
   const cards = shuffle(locations.map(l => l.id));
   return {
-    ...board,
+    ...state,
     unplayedInfectionCards: cards,
+  };
+}
+
+function prepareFirstInfections(state) {
+  const { unplayedInfectionCards } = state;
+  const infections = {};
+  const usedCubes = fromPairs(diseases.map(d => [d, 0]));
+  // Infect 3 locations with 3 cubes
+  const highInfections = slice(unplayedInfectionCards, 0, 3);
+  highInfections.forEach((id) => {
+    const { disease } = locationsMap[id];
+    infections[id] = { [disease]: 3 };
+    usedCubes[disease] += 3;
+  });
+  // Infect 3 locations with 2 cubes
+  const normalInfections = slice(unplayedInfectionCards, 3, 6);
+  normalInfections.forEach((id) => {
+    const { disease } = locationsMap[id];
+    infections[id] = { [disease]: 2 };
+    usedCubes[disease] += 2;
+  });
+  // Infect 3 locations with 1 cubes
+  const lowInfections = slice(unplayedInfectionCards, 6, 9);
+  lowInfections.forEach((id) => {
+    const { disease } = locationsMap[id];
+    infections[id] = { [disease]: 1 };
+    usedCubes[disease] += 1;
+  });
+  return {
+    ...state,
+    infections,
+    usedCubes,
+    playedInfectionCards: slice(unplayedInfectionCards, 0, 9),
+    unplayedInfectionCards: slice(unplayedInfectionCards, 9),
   };
 }
