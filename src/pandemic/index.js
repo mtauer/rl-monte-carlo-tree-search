@@ -61,7 +61,7 @@ function prepareResources(state) {
   // Position all players and a research center in Atlanta
   return {
     ...state,
-    playerPositions: fromPairs(players.map(p => [p.id, 3])),
+    playerPosition: fromPairs(players.map(p => [p.id, 3])),
     researchCenters: [3],
     research: {},
     currentPlayer: players[0].id,
@@ -141,9 +141,9 @@ function prepareFirstInfections(state) {
 
 export function getValidActions(state = initialState) {
   const {
-    currentPlayer, playerPositions, playerCards, researchCenters, infections,
+    currentPlayer, playerPosition, playerCards, researchCenters, infections,
   } = state;
-  const location = locationsMap[playerPositions[currentPlayer]];
+  const location = locationsMap[playerPosition[currentPlayer]];
   const cards = playerCards[currentPlayer];
   const actions = [];
   // DRIVE_FERRY
@@ -185,7 +185,7 @@ export function getValidActions(state = initialState) {
     );
   }
   // SHARE_KNOWLEDGE
-  const playersOnLocation = toPairs(playerPositions)
+  const playersOnLocation = toPairs(playerPosition)
     .filter(pair => pair[1] === location.id)
     .map(pair => Number(pair[0]));
   if (playersOnLocation.length > 1) {
@@ -211,6 +211,70 @@ export function getValidActions(state = initialState) {
     }
   }
   return flatten(actions);
+}
+
+export function performAction(state = initialState, action) {
+  const {
+    currentMovesCount, currentPlayer, playerCards, playerPosition,
+  } = state;
+  const cards = playerCards[currentPlayer];
+  const position = playerPosition[currentPlayer];
+  switch (action.type) {
+    case DRIVE_FERRY: {
+      const { to } = action;
+      return {
+        ...state,
+        currentMovesCount: currentMovesCount - 1,
+        playerPosition: {
+          ...state.playerPosition,
+          [currentPlayer]: to,
+        },
+      };
+    }
+    case DIRECT_FLIGHT: {
+      const { to } = action;
+      return {
+        ...state,
+        currentMovesCount: currentMovesCount - 1,
+        playerPosition: {
+          ...state.playerPosition,
+          [currentPlayer]: to,
+        },
+        playerCards: {
+          ...state.playerCards,
+          [currentPlayer]: cards.filter(id => id !== to),
+        },
+      };
+    }
+    case CHARTER_FLIGHT: {
+      const { to } = action;
+      return {
+        ...state,
+        currentMovesCount: currentMovesCount - 1,
+        playerPosition: {
+          ...state.playerPosition,
+          [currentPlayer]: to,
+        },
+        playerCards: {
+          ...state.playerCards,
+          [currentPlayer]: cards.filter(id => id !== position),
+        },
+      };
+    }
+    case SHUTTLE_FLIGHT: {
+      const { to } = action;
+      return {
+        ...state,
+        currentMovesCount: currentMovesCount - 1,
+        playerPosition: {
+          ...state.playerPosition,
+          [currentPlayer]: to,
+        },
+      };
+    }
+    default:
+      return state;
+  }
 }
 
 export function getValue(state = initialState, timePenalty = 0) {

@@ -44,12 +44,14 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionsUcb1Map = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.ucb1]),
   );
-  const state = initialState;
+  let state = initialState;
   // let nextAction;
   console.log('Pandemic initial state', state);
   console.log('Pandemic valid actions', pandemic.getValidActions(state));
   const nextAction = sample(pandemic.getValidActions(state));
+  state = pandemic.performAction(state, nextAction);
   console.log('Pandemic next action', nextAction);
+  console.log('Pandemic next state', state);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
