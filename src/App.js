@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import fromPairs from 'lodash/fromPairs';
 import range from 'lodash/range';
-import sample from 'lodash/sample';
 
 import * as pandemic from './pandemic';
 import initialState from './pandemic/initialState.json';
+import monteCarloTreeSearch from './monteCarloTreeSearch';
 import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
@@ -44,26 +44,11 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionsUcb1Map = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.ucb1]),
   );
-  let state = initialState;
-  let nextAction;
+  const state = initialState;
   console.log('Pandemic initial state', state);
   console.log('Pandemic valid actions', pandemic.getValidActions(state));
-  nextAction = sample(pandemic.getValidActions(state));
-  state = pandemic.performAction(state, nextAction);
-  console.log('1 Pandemic next action', nextAction);
-  console.log('1 Pandemic next state', state);
-  nextAction = sample(pandemic.getValidActions(state));
-  state = pandemic.performAction(state, nextAction);
-  console.log('2 Pandemic next action', nextAction);
-  console.log('2 Pandemic next state', state);
-  nextAction = sample(pandemic.getValidActions(state));
-  state = pandemic.performAction(state, nextAction);
-  console.log('3 Pandemic next action', nextAction);
-  console.log('3 Pandemic next state', state);
-  nextAction = sample(pandemic.getValidActions(state));
-  state = pandemic.performAction(state, nextAction);
-  console.log('4 Pandemic next action', nextAction);
-  console.log('4 Pandemic next state', state);
+  const root = monteCarloTreeSearch(pandemic, state);
+  console.log('Search tree root', root);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
