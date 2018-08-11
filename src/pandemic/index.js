@@ -22,6 +22,9 @@ const DISCOVER_CURE = 'DISCOVER_CURE';
 const TREAT_DISEASE = 'TREAT_DISEASE';
 const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
 
+const PLAYERS = 'PLAYERS';
+const BOARD = 'BOARD';
+
 export const locationsMap = getLocationsMap();
 export const players = getPlayers();
 export const initialState = prepareState();
@@ -63,6 +66,7 @@ function prepareResources(state) {
     research: {},
     currentPlayer: players[0].id,
     currentMovesCount: 4,
+    outbreaksCount: 0,
   };
 }
 
@@ -87,6 +91,7 @@ function preparePlayerCards(state) {
     ...state,
     unplayedPlayerCards: cards,
     playerCards,
+    insufficientPlayerCards: false,
   };
 }
 
@@ -128,6 +133,7 @@ function prepareFirstInfections(state) {
     ...state,
     infections,
     usedCubes,
+    insufficientCubes: false,
     playedInfectionCards: slice(unplayedInfectionCards, 0, 9),
     unplayedInfectionCards: slice(unplayedInfectionCards, 9),
   };
@@ -205,4 +211,26 @@ export function getValidActions(state = initialState) {
     }
   }
   return flatten(actions);
+}
+
+export function getValue(state = initialState, timePenalty = 0) {
+  const winner = getWinner(state);
+  switch (winner) {
+    case PLAYERS: return 1;
+    case BOARD: return -1;
+    default: return timePenalty;
+  }
+}
+
+export function getWinner(state = initialState) {
+  const {
+    research, insufficientCubes, insufficientPlayerCards, outbreaksCount,
+  } = state;
+  if (keys(research).length === 4) {
+    return PLAYERS;
+  }
+  if (insufficientCubes || insufficientPlayerCards || outbreaksCount >= 8) {
+    return BOARD;
+  }
+  return null;
 }
