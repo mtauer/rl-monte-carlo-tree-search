@@ -59,17 +59,18 @@ export default function monteCarloTreeSearchReducer(state = initialState, action
 }
 
 export function getGameState(state) {
-  return state.gameState;
+  return state.connectFour.gameState;
 }
 
 export function getSearchTreeRoot(state) {
-  return state.searchTreeRoot;
+  return state.connectFour.searchTreeRoot;
 }
 
 export function monteCarloTreeSearchEpic(action$, state$) {
   return interval(150).pipe(
     map(() => {
-      const { gameState, searchTreeRoot } = state$.value;
+      const gameState = getGameState(state$.value);
+      const searchTreeRoot = getSearchTreeRoot(state$.value);
       const root = monteCarloTreeSearch(connectFour, gameState, searchTreeRoot);
       return setSearchTreeRootAction(cloneDeep(root));
     }),
