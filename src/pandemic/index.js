@@ -194,7 +194,7 @@ export function getValidActions(state = initialState) {
   if (infections[location.id]) {
     actions.push(
       keys(infections[location.id])
-        .map(disease => ({ type: TREAT_DISEASE, disease })),
+        .map(disease => ({ type: TREAT_DISEASE, disease, at: location.id })),
     );
   }
   // SHARE_KNOWLEDGE
@@ -275,6 +275,13 @@ export function performAction(state = initialState, action) {
       newState.currentMovesCount -= 1;
       newState.research[disease] = DISEASE_CURED;
       newState.playerCards[currentPlayer] = difference(cards, usedCards);
+      break;
+    }
+    case TREAT_DISEASE: {
+      const { disease, at } = action;
+      newState.currentMovesCount -= 1;
+      newState.infections[at][disease] -= 1;
+      newState.usedCubes[disease] -= 1;
       break;
     }
     default:
