@@ -193,8 +193,9 @@ export function getValidActions(state = initialState) {
   // TREAT_DISEASE
   if (infections[location.id]) {
     actions.push(
-      keys(infections[location.id])
-        .map(disease => ({ type: TREAT_DISEASE, disease, at: location.id })),
+      toPairs(infections[location.id])
+        .filter(pair => pair[1] > 0)
+        .map(pair => ({ type: TREAT_DISEASE, disease: pair[0], at: location.id })),
     );
   }
   // SHARE_KNOWLEDGE
@@ -228,7 +229,7 @@ export function getValidActions(state = initialState) {
 
 export function performAction(state = initialState, action) {
   const {
-    currentPlayer, playerCards, playerPosition,
+    currentPlayer, playerCards, playerPosition, unplayedPlayerCards,
   } = state;
   const cards = playerCards[currentPlayer];
   const position = playerPosition[currentPlayer];
@@ -294,6 +295,19 @@ export function performAction(state = initialState, action) {
     default:
       break;
   }
+  if (newState.currentMovesCount === 0) {
+    // Draw 2 cards
+    if (newState.unplayedPlayerCards.length <= 2) {
+      newState.insufficientPlayerCards = true;
+    } else {
+      const newCards = take(unplayedPlayerCards, 2);
+      newState.unplayedPlayerCards = slice(unplayedPlayerCards, 2);
+      newState.playerCards[currentPlayer] = [...cards, ...newCards.filter(id => id < 48)];
+    }
+    // End of turn
+    newState.currentPlayer = (newState.currentPlayer + 1) % players.length;
+    newState.currentMovesCount = 4;
+  }
   return newState;
 }
 
@@ -304,6 +318,10 @@ export function getValue(state = initialState, timePenalty = 0) {
     case BOARD: return -1;
     default: return timePenalty;
   }
+}
+
+export function isFinished(state = initialState) {
+  return Boolean(getWinner(state));
 }
 
 export function getWinner(state = initialState) {

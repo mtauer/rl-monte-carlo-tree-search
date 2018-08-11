@@ -56,6 +56,14 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   state = pandemic.performAction(state, nextAction);
   console.log('2 Pandemic next action', nextAction);
   console.log('2 Pandemic next state', state);
+  nextAction = sample(pandemic.getValidActions(state));
+  state = pandemic.performAction(state, nextAction);
+  console.log('3 Pandemic next action', nextAction);
+  console.log('3 Pandemic next state', state);
+  nextAction = sample(pandemic.getValidActions(state));
+  state = pandemic.performAction(state, nextAction);
+  console.log('4 Pandemic next action', nextAction);
+  console.log('4 Pandemic next state', state);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
