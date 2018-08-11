@@ -8,6 +8,7 @@ import range from 'lodash/range';
 import includes from 'lodash/includes';
 import groupBy from 'lodash/groupBy';
 import keys from 'lodash/keys';
+import cloneDeep from 'lodash/cloneDeep';
 
 import {
   diseases, locations, routes, outbreaks,
@@ -215,66 +216,42 @@ export function getValidActions(state = initialState) {
 
 export function performAction(state = initialState, action) {
   const {
-    currentMovesCount, currentPlayer, playerCards, playerPosition,
+    currentPlayer, playerCards, playerPosition,
   } = state;
   const cards = playerCards[currentPlayer];
   const position = playerPosition[currentPlayer];
+  const newState = cloneDeep(state);
   switch (action.type) {
     case DRIVE_FERRY: {
       const { to } = action;
-      return {
-        ...state,
-        currentMovesCount: currentMovesCount - 1,
-        playerPosition: {
-          ...state.playerPosition,
-          [currentPlayer]: to,
-        },
-      };
+      newState.currentMovesCount -= 1;
+      newState.playerPosition[currentPlayer] = to;
+      break;
     }
     case DIRECT_FLIGHT: {
       const { to } = action;
-      return {
-        ...state,
-        currentMovesCount: currentMovesCount - 1,
-        playerPosition: {
-          ...state.playerPosition,
-          [currentPlayer]: to,
-        },
-        playerCards: {
-          ...state.playerCards,
-          [currentPlayer]: cards.filter(id => id !== to),
-        },
-      };
+      newState.currentMovesCount -= 1;
+      newState.playerPosition[currentPlayer] = to;
+      newState.playerCards[currentPlayer] = cards.filter(id => id !== to);
+      break;
     }
     case CHARTER_FLIGHT: {
       const { to } = action;
-      return {
-        ...state,
-        currentMovesCount: currentMovesCount - 1,
-        playerPosition: {
-          ...state.playerPosition,
-          [currentPlayer]: to,
-        },
-        playerCards: {
-          ...state.playerCards,
-          [currentPlayer]: cards.filter(id => id !== position),
-        },
-      };
+      newState.currentMovesCount -= 1;
+      newState.playerPosition[currentPlayer] = to;
+      newState.playerCards[currentPlayer] = cards.filter(id => id !== position);
+      break;
     }
     case SHUTTLE_FLIGHT: {
       const { to } = action;
-      return {
-        ...state,
-        currentMovesCount: currentMovesCount - 1,
-        playerPosition: {
-          ...state.playerPosition,
-          [currentPlayer]: to,
-        },
-      };
+      newState.currentMovesCount -= 1;
+      newState.playerPosition[currentPlayer] = to;
+      break;
     }
     default:
-      return state;
+      break;
   }
+  return newState;
 }
 
 export function getValue(state = initialState, timePenalty = 0) {
