@@ -14,6 +14,7 @@ import {
   diseases, locations, routes, outbreaks,
 } from './constants';
 
+const DO_NOTHING = 'DO_NOTHING';
 const DRIVE_FERRY = 'DRIVE_FERRY';
 const DIRECT_FLIGHT = 'DIRECT_FLIGHT';
 const CHARTER_FLIGHT = 'CHARTER_FLIGHT';
@@ -147,6 +148,8 @@ export function getValidActions(state = initialState) {
   const location = locationsMap[playerPosition[currentPlayer]];
   const cards = playerCards[currentPlayer];
   const actions = [];
+  // DO_NOTHING
+  actions.push({ type: DO_NOTHING });
   // DRIVE_FERRY
   actions.push(location.connectedLocations.map(id => ({ type: DRIVE_FERRY, to: id })));
   // DIRECT_FLIGHT
@@ -222,6 +225,10 @@ export function performAction(state = initialState, action) {
   const position = playerPosition[currentPlayer];
   const newState = cloneDeep(state);
   switch (action.type) {
+    case DO_NOTHING: {
+      newState.currentMovesCount -= 1;
+      break;
+    }
     case DRIVE_FERRY: {
       const { to } = action;
       newState.currentMovesCount -= 1;
