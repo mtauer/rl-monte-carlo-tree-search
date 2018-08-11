@@ -6,7 +6,7 @@ import { Route, Switch, Redirect } from 'react-router';
 
 import store, { history } from './configureStore';
 import registerServiceWorker from './registerServiceWorker';
-import App from './App';
+import ConnectFourPage from './connectFour/ConnectFourPage';
 import './index.css';
 
 const target = document.getElementById('root');
@@ -18,7 +18,7 @@ ReactDOM.render(
         <Route exact path="/">
           <Redirect to="/connect-4" />
         </Route>
-        <Route exact path="/connect-4" component={App} />
+        <Route exact path="/connect-4" component={ConnectFourPage} />
       </Switch>
     </ConnectedRouter>
   </Provider>,
