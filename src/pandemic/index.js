@@ -154,8 +154,9 @@ export function getValidActions(state = initialState) {
   const location = locationsMap[playerPosition[currentPlayer]];
   const cards = playerCards[currentPlayer];
   const actions = [];
+  // TODO Enable do nothing as action again
   // DO_NOTHING
-  actions.push({ type: DO_NOTHING });
+  // actions.push({ type: DO_NOTHING });
   // DRIVE_FERRY
   actions.push(location.connectedLocations.map(id => ({ type: DRIVE_FERRY, to: id })));
   // DIRECT_FLIGHT
@@ -328,7 +329,8 @@ export function getWinner(state = initialState) {
   const {
     research, insufficientCubes, insufficientPlayerCards, outbreaksCount,
   } = state;
-  if (keys(research).length === 4) {
+  // TODO Change this back to length >= 4
+  if (keys(research).length >= 1) {
     return PLAYERS;
   }
   if (insufficientCubes || insufficientPlayerCards || outbreaksCount >= 8) {
