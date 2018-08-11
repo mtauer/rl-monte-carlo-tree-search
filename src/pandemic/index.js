@@ -9,6 +9,8 @@ import includes from 'lodash/includes';
 import groupBy from 'lodash/groupBy';
 import keys from 'lodash/keys';
 import cloneDeep from 'lodash/cloneDeep';
+import difference from 'lodash/difference';
+import take from 'lodash/take';
 
 import {
   diseases, locations, routes, outbreaks,
@@ -26,6 +28,9 @@ const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
 
 const PLAYERS = 'PLAYERS';
 const BOARD = 'BOARD';
+
+const DISEASE_CURED = 'DISEASE_CURED';
+// const DISEASE_ERADICATED = 'DISEASE_ERADICATED';
 
 export const locationsMap = getLocationsMap();
 export const players = getPlayers();
@@ -180,7 +185,10 @@ export function getValidActions(state = initialState) {
   actions.push(
     toPairs(cardsByDisease)
       .filter(pair => pair[1].length >= 5)
-      .map(pair => ({ type: DISCOVER_CURE, disease: pair[0] })),
+      .map((pair) => {
+        const usedCards = take(pair[1], 5);
+        return { type: DISCOVER_CURE, disease: pair[0], usedCards };
+      }),
   );
   // TREAT_DISEASE
   if (infections[location.id]) {
@@ -254,6 +262,19 @@ export function performAction(state = initialState, action) {
       const { to } = action;
       newState.currentMovesCount -= 1;
       newState.playerPosition[currentPlayer] = to;
+      break;
+    }
+    case BUILD_RESEARCH_CENTER: {
+      const { at } = action;
+      newState.currentMovesCount -= 1;
+      newState.researchCenters.push(at);
+      break;
+    }
+    case DISCOVER_CURE: {
+      const { disease, usedCards } = action;
+      newState.currentMovesCount -= 1;
+      newState.research[disease] = DISEASE_CURED;
+      newState.playerCards[currentPlayer] = difference(cards, usedCards);
       break;
     }
     default:
