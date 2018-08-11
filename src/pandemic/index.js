@@ -76,7 +76,8 @@ function preparePlayerCards(state) {
   // Shuffle the location player cards
   let cards = shuffle(locations.map(l => l.id));
   // Give 2 players 4 cards each, 3 player 3 cards or 4 players 2 cards
-  const cardsPerPlayer = 4;
+  const cardsPerPlayerMap = { 2: 4, 3: 3, 4: 2 };
+  const cardsPerPlayer = cardsPerPlayerMap[players.length];
   const playerCards = fromPairs(players.map((p, i) => [
     p.id,
     slice(cards, i * cardsPerPlayer, (i + 1) * cardsPerPlayer),
