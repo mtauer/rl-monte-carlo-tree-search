@@ -3,11 +3,11 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { routerMiddleware, connectRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 
-import monteCarloTreeSearchReducer, { monteCarloTreeSearchEpic } from './monteCarloTreeSearchRedux';
+import connectFourReducer, { simulateConnectFourEpic } from './connectFour/redux';
 
 export const history = createHistory();
 const rootReducer = combineReducers({
-  connectFour: monteCarloTreeSearchReducer,
+  connectFour: connectFourReducer,
 
 });
 const epicMiddleware = createEpicMiddleware();
@@ -17,6 +17,8 @@ const store = createStore(
   applyMiddleware(epicMiddleware, routerMiddleware(history)),
 );
 
-epicMiddleware.run(combineEpics(monteCarloTreeSearchEpic));
+epicMiddleware.run(combineEpics(
+  simulateConnectFourEpic,
+));
 
 export default store;

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import fromPairs from 'lodash/fromPairs';
 import range from 'lodash/range';
 
-import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
+import { getGameState, getSearchTreeRoot, performGameActionAction } from './connectFour/redux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
 import './App.css';
