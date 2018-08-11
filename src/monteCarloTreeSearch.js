@@ -7,6 +7,7 @@ import first from 'lodash/first';
 const options = {
   learningTimeInMs: 100,
   ucb1ExplorationParameter: Math.sqrt(2), // originally it's Math.sqrt(2)
+  ucb1WithMinMax: false,
 };
 
 export default function monteCarloTreeSearch(game, state, initialRoot) {
@@ -28,7 +29,11 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     const rolloutValue = getRolloutValue(game, currentNode.state);
     // 4. Back propagation
     backPropagateValue(currentNode, rolloutValue);
-    calculateUCB1Values(root, undefined, state.currentPlayer === game.O);
+    calculateUCB1Values(
+      root,
+      undefined,
+      options.ucb1WithMinMax && state.currentPlayer === game.O,
+    );
   }
   return root;
 }
@@ -92,7 +97,8 @@ function calculateUCB1Values(node, root = node, maximize = true) {
     const n = node.deepCount; // total number of subtree value estimations
     const N = root.deepCount; // total number of all value estimations
     const c = options.ucb1ExplorationParameter; // exploration parameter
-    const meanV = maximize ? v / n : 1 - v / n; // average subtree value estimation
+    const meanV = options.ucb1WithMinMax && maximize
+      ? v / n : 1 - v / n; // average subtree value estimation
     const ucb1 = meanV + c * Math.sqrt(Math.log(N) / n);
     node.ucb1 = ucb1;
   }
