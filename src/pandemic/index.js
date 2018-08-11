@@ -4,6 +4,7 @@ import slice from 'lodash/slice';
 import chunk from 'lodash/chunk';
 import flatten from 'lodash/flatten';
 import range from 'lodash/range';
+import includes from 'lodash/includes';
 
 import {
   diseases, locations, routes, outbreaks,
@@ -13,7 +14,7 @@ export const locationsMap = getLocationsMap();
 export const players = getPlayers();
 export const initialState = prepareState();
 
-export function prepareState() {
+function prepareState() {
   let state = {};
   state = prepareResources(state);
   state = preparePlayerCards(state);
@@ -118,4 +119,34 @@ function prepareFirstInfections(state) {
     playedInfectionCards: slice(unplayedInfectionCards, 0, 9),
     unplayedInfectionCards: slice(unplayedInfectionCards, 9),
   };
+}
+
+export function getValidActions(state = initialState) {
+  const {
+    currentPlayer, playerPositions, playerCards, researchCenters,
+  } = state;
+  const location = locationsMap[playerPositions[currentPlayer]];
+  const cards = playerCards[currentPlayer];
+  const actions = [];
+  // Drive/ferry
+  actions.push(location.connectedLocations.map(id => ({ type: 'DRIVE_FERRY', to: id })));
+  // Direct flights
+  actions.push(cards.map(id => ({ type: 'DIRECT_FLIGHT', to: id })));
+  // Charter flighs
+  if (includes(cards, location.id)) {
+    actions.push(
+      locations
+        .filter(l => l.id !== location.id)
+        .map(l => ({ type: 'CHARTER_FLIGHT', to: l.id })),
+    );
+  }
+  // Shuttle flight
+  if (researchCenters.length > 1 && includes(researchCenters, location.id)) {
+    actions.push(
+      researchCenters
+        .filter(rc => rc !== location.id)
+        .map(rc => ({ type: 'SHUTTLE_FLIGHT', to: rc })),
+    );
+  }
+  return flatten(actions);
 }

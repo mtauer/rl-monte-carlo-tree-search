@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import fromPairs from 'lodash/fromPairs';
 import range from 'lodash/range';
 
-import { initialState } from './pandemic';
+import * as pandemic from './pandemic';
 import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
@@ -42,7 +42,7 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionsUcb1Map = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.ucb1]),
   );
-  console.log('Pandemic inital state', initialState);
+  console.log('Pandemic valid actions', pandemic.getValidActions());
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
