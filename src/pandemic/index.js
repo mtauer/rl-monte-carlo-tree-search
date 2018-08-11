@@ -7,6 +7,7 @@ import flatten from 'lodash/flatten';
 import range from 'lodash/range';
 import includes from 'lodash/includes';
 import groupBy from 'lodash/groupBy';
+import keys from 'lodash/keys';
 
 import {
   diseases, locations, routes, outbreaks,
@@ -18,6 +19,8 @@ const CHARTER_FLIGHT = 'CHARTER_FLIGHT';
 const SHUTTLE_FLIGHT = 'SHUTTLE_FLIGHT';
 const BUILD_RESEARCH_CENTER = 'BUILD_RESEARCH_CENTER';
 const DISCOVER_CURE = 'DISCOVER_CURE';
+const TREAT_DISEASE = 'TREAT_DISEASE';
+const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
 
 export const locationsMap = getLocationsMap();
 export const players = getPlayers();
@@ -132,7 +135,7 @@ function prepareFirstInfections(state) {
 
 export function getValidActions(state = initialState) {
   const {
-    currentPlayer, playerPositions, playerCards, researchCenters,
+    currentPlayer, playerPositions, playerCards, researchCenters, infections,
   } = state;
   const location = locationsMap[playerPositions[currentPlayer]];
   const cards = playerCards[currentPlayer];
@@ -168,5 +171,38 @@ export function getValidActions(state = initialState) {
       .filter(pair => pair[1].length >= 5)
       .map(pair => ({ type: DISCOVER_CURE, disease: pair[0] })),
   );
+  // TREAT_DISEASE
+  if (infections[location.id]) {
+    actions.push(
+      keys(infections[location.id])
+        .map(disease => ({ type: TREAT_DISEASE, disease })),
+    );
+  }
+  // SHARE_KNOWLEDGE
+  const playersOnLocation = toPairs(playerPositions)
+    .filter(pair => pair[1] === location.id)
+    .map(pair => Number(pair[0]));
+  if (playersOnLocation.length > 1) {
+    const others = playersOnLocation.filter(id => id !== currentPlayer);
+    if (includes(cards, location.id)) {
+      actions.push(others.map(id => ({
+        type: SHARE_KNOWLEDGE,
+        card: location.id,
+        from: currentPlayer,
+        to: id,
+      })));
+    } else {
+      others.forEach((id) => {
+        if (includes(playerCards[id], location.id)) {
+          actions.push({
+            type: SHARE_KNOWLEDGE,
+            card: location.id,
+            from: id,
+            to: currentPlayer,
+          });
+        }
+      });
+    }
+  }
   return flatten(actions);
 }
