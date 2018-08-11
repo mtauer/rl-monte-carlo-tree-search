@@ -1,14 +1,23 @@
 import fromPairs from 'lodash/fromPairs';
+import toPairs from 'lodash/toPairs';
 import shuffle from 'lodash/shuffle';
 import slice from 'lodash/slice';
 import chunk from 'lodash/chunk';
 import flatten from 'lodash/flatten';
 import range from 'lodash/range';
 import includes from 'lodash/includes';
+import groupBy from 'lodash/groupBy';
 
 import {
   diseases, locations, routes, outbreaks,
 } from './constants';
+
+const DRIVE_FERRY = 'DRIVE_FERRY';
+const DIRECT_FLIGHT = 'DIRECT_FLIGHT';
+const CHARTER_FLIGHT = 'CHARTER_FLIGHT';
+const SHUTTLE_FLIGHT = 'SHUTTLE_FLIGHT';
+const BUILD_RESEARCH_CENTER = 'BUILD_RESEARCH_CENTER';
+const DISCOVER_CURE = 'DISCOVER_CURE';
 
 export const locationsMap = getLocationsMap();
 export const players = getPlayers();
@@ -128,25 +137,36 @@ export function getValidActions(state = initialState) {
   const location = locationsMap[playerPositions[currentPlayer]];
   const cards = playerCards[currentPlayer];
   const actions = [];
-  // Drive/ferry
-  actions.push(location.connectedLocations.map(id => ({ type: 'DRIVE_FERRY', to: id })));
-  // Direct flights
-  actions.push(cards.map(id => ({ type: 'DIRECT_FLIGHT', to: id })));
-  // Charter flighs
+  // DRIVE_FERRY
+  actions.push(location.connectedLocations.map(id => ({ type: DRIVE_FERRY, to: id })));
+  // DIRECT_FLIGHT
+  actions.push(cards.map(id => ({ type: DIRECT_FLIGHT, to: id })));
+  // CHARTER_FLIGHT
   if (includes(cards, location.id)) {
     actions.push(
       locations
         .filter(l => l.id !== location.id)
-        .map(l => ({ type: 'CHARTER_FLIGHT', to: l.id })),
+        .map(l => ({ type: CHARTER_FLIGHT, to: l.id })),
     );
   }
-  // Shuttle flight
+  // SHUTTLE_FLIGHT
   if (researchCenters.length > 1 && includes(researchCenters, location.id)) {
     actions.push(
       researchCenters
         .filter(rc => rc !== location.id)
-        .map(rc => ({ type: 'SHUTTLE_FLIGHT', to: rc })),
+        .map(rc => ({ type: SHUTTLE_FLIGHT, to: rc })),
     );
   }
+  // BUILD_RESEARCH_CENTER
+  if (includes(cards, location.id)) {
+    actions.push({ type: BUILD_RESEARCH_CENTER, at: location.id });
+  }
+  // DISCOVER_CURE
+  const cardsByDisease = groupBy(cards, (c => locationsMap[c].disease));
+  actions.push(
+    toPairs(cardsByDisease)
+      .filter(pair => pair[1].length >= 5)
+      .map(pair => ({ type: DISCOVER_CURE, disease: pair[0] })),
+  );
   return flatten(actions);
 }

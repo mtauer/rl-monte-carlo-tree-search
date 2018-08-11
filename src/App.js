@@ -42,6 +42,7 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionsUcb1Map = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.ucb1]),
   );
+  console.log('Pandemic initial state', pandemic.initialState);
   console.log('Pandemic valid actions', pandemic.getValidActions());
   return (
     <Container>
