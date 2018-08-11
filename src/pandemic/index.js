@@ -284,6 +284,13 @@ export function performAction(state = initialState, action) {
       newState.usedCubes[disease] -= 1;
       break;
     }
+    case SHARE_KNOWLEDGE: {
+      const { card, from, to } = action;
+      newState.currentMovesCount -= 1;
+      newState.playerCards[from] = playerCards[from].filter(id => id !== card);
+      newState.playerCards[to] = [...playerCards[to], card];
+      break;
+    }
     default:
       break;
   }
