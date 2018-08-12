@@ -245,6 +245,7 @@ export function getValidActions(state = initialState) {
     if (includes(cards, location.id)) {
       actions.push(others.map(id => ({
         type: SHARE_KNOWLEDGE,
+        player: currentPlayer,
         card: location.id,
         from: currentPlayer,
         to: id,
@@ -267,11 +268,9 @@ export function getValidActions(state = initialState) {
 }
 
 export function performAction(state = initialState, action) {
-  const {
-    currentPlayer, playerCards, playerPosition, unplayedPlayerCards,
-  } = state;
-  const cards = playerCards[currentPlayer];
-  const position = playerPosition[currentPlayer];
+  const { playerCards, unplayedPlayerCards } = state;
+  const { player } = action;
+  const cards = playerCards[player];
   const newState = cloneDeep(state);
   switch (action.type) {
     case DO_NOTHING: {
@@ -281,40 +280,41 @@ export function performAction(state = initialState, action) {
     case DRIVE_FERRY: {
       const { to } = action;
       newState.currentMovesCount -= 1;
-      newState.playerPosition[currentPlayer] = to;
+      newState.playerPosition[player] = to;
       break;
     }
     case DIRECT_FLIGHT: {
-      const { to } = action;
+      const { to, card } = action;
       newState.currentMovesCount -= 1;
-      newState.playerPosition[currentPlayer] = to;
-      newState.playerCards[currentPlayer] = cards.filter(id => id !== to);
+      newState.playerPosition[player] = to;
+      newState.playerCards[player] = newState.playerCards[player].filter(id => id !== card);
       break;
     }
     case CHARTER_FLIGHT: {
-      const { to } = action;
+      const { to, card } = action;
       newState.currentMovesCount -= 1;
-      newState.playerPosition[currentPlayer] = to;
-      newState.playerCards[currentPlayer] = cards.filter(id => id !== position);
+      newState.playerPosition[player] = to;
+      newState.playerCards[player] = newState.playerCards[player].filter(id => id !== card);
       break;
     }
     case SHUTTLE_FLIGHT: {
       const { to } = action;
       newState.currentMovesCount -= 1;
-      newState.playerPosition[currentPlayer] = to;
+      newState.playerPosition[player] = to;
       break;
     }
     case BUILD_RESEARCH_CENTER: {
-      const { at } = action;
+      const { at, card } = action;
       newState.currentMovesCount -= 1;
-      newState.researchCenters.push(at);
+      newState.researchCenters = [...newState.researchCenters, at];
+      newState.playerCards[player] = newState.playerCards[player].filter(id => id !== card);
       break;
     }
     case DISCOVER_CURE: {
       const { disease, usedCards } = action;
       newState.currentMovesCount -= 1;
       newState.research[disease] = DISEASE_CURED;
-      newState.playerCards[currentPlayer] = difference(cards, usedCards);
+      newState.playerCards[player] = difference(cards, usedCards);
       break;
     }
     case TREAT_DISEASE: {
@@ -327,7 +327,7 @@ export function performAction(state = initialState, action) {
     case SHARE_KNOWLEDGE: {
       const { card, from, to } = action;
       newState.currentMovesCount -= 1;
-      newState.playerCards[from] = playerCards[from].filter(id => id !== card);
+      newState.playerCards[from] = newState.playerCards[from].filter(id => id !== card);
       newState.playerCards[to] = [...playerCards[to], card];
       break;
     }
@@ -342,7 +342,10 @@ export function performAction(state = initialState, action) {
       const shuffledCards = shuffle(unplayedPlayerCards);
       const newCards = take(shuffledCards, 2);
       newState.unplayedPlayerCards = slice(shuffledCards, 2);
-      newState.playerCards[currentPlayer] = [...cards, ...newCards.filter(id => id < 48)];
+      newState.playerCards[player] = [
+        ...newState.playerCards[player],
+        ...newCards.filter(id => id < 48),
+      ];
     }
     // End of turn
     newState.currentPlayer = (newState.currentPlayer + 1) % players.length;
