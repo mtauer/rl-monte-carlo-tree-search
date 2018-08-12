@@ -13,6 +13,8 @@ const options = {
 };
 
 export default function monteCarloTreeSearch(game, state, initialRoot) {
+  if (game.isFinished(state)) { return null; }
+
   const startTime = performance.now();
   let root;
   if (initialRoot) {
