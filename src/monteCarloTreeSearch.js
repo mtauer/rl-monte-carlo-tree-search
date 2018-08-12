@@ -4,6 +4,7 @@ import sample from 'lodash/sample';
 import maxBy from 'lodash/maxBy';
 import first from 'lodash/first';
 import repeat from 'lodash/repeat';
+import isEqual from 'lodash/isEqual';
 
 const options = {
   learningTimeInMs: 100,
@@ -43,7 +44,7 @@ export function monteCarloTreeSearchPerformAction(initialRoot, action) {
   if (!initialRoot || !initialRoot.children) { return null; }
   return first(
     initialRoot.children
-      .filter(n => n.action.index === action.index),
+      .filter(n => isEqual(n.action, action)),
   ) || null;
 }
 
