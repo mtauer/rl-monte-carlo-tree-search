@@ -9,11 +9,10 @@ import {
   Section, SectionTitle, Row, Label,
 } from '../components/Page';
 import Location from './Location';
+import Cards from './Cards';
 
 const PlayerContainer = styled.div`
   flex: 1;
-`;
-const Card = styled.div`
 `;
 
 const PlayersSection = ({ players }) => (
@@ -24,11 +23,7 @@ const PlayersSection = ({ players }) => (
           <SectionTitle>Player {player.id}</SectionTitle>
           <Label>Position: <Location locationId={player.position} /></Label>
           <Label>Cards:</Label>
-          { player.cards.map(card => (
-            <Card key={card}>
-              <Location locationId={card} />
-            </Card>
-          ))}
+          <Cards cardIds={player.cards} />
         </PlayerContainer>
       ))}
     </Row>
