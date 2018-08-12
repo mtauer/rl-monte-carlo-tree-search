@@ -90,8 +90,7 @@ ConnectFourBoard.defaultProps = {
 };
 
 function getCellBgColor(value) {
-  if (!value) { return null; }
-
+  if (!value) { return '#e6e6e6'; }
   const valueColor = scaleLinear().domain([-1.0, 0.0, 1.0])
     .interpolate(interpolateHcl)
     .range([rgb('#a50026'), rgb('#ffffff'), rgb('#1a9850')]);

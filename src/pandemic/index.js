@@ -158,15 +158,32 @@ export function getValidActions(state = initialState) {
   // DO_NOTHING
   // actions.push({ type: DO_NOTHING });
   // DRIVE_FERRY
-  actions.push(location.connectedLocations.map(id => ({ type: DRIVE_FERRY, to: id })));
+  actions.push(location.connectedLocations.map(id => ({
+    type: DRIVE_FERRY,
+    player: currentPlayer,
+    from: location.id,
+    to: id,
+  })));
   // DIRECT_FLIGHT
-  actions.push(cards.map(id => ({ type: DIRECT_FLIGHT, to: id })));
+  actions.push(cards.map(id => ({
+    type: DIRECT_FLIGHT,
+    player: currentPlayer,
+    from: location.id,
+    to: id,
+    card: id,
+  })));
   // CHARTER_FLIGHT
   if (includes(cards, location.id)) {
     actions.push(
       locations
         .filter(l => l.id !== location.id)
-        .map(l => ({ type: CHARTER_FLIGHT, to: l.id })),
+        .map(l => ({
+          type: CHARTER_FLIGHT,
+          player: currentPlayer,
+          from: location.id,
+          to: l.id,
+          card: location.id,
+        })),
     );
   }
   // SHUTTLE_FLIGHT
@@ -174,12 +191,22 @@ export function getValidActions(state = initialState) {
     actions.push(
       researchCenters
         .filter(rc => rc !== location.id)
-        .map(rc => ({ type: SHUTTLE_FLIGHT, to: rc })),
+        .map(rc => ({
+          type: SHUTTLE_FLIGHT,
+          player: currentPlayer,
+          from: location.id,
+          to: rc,
+        })),
     );
   }
   // BUILD_RESEARCH_CENTER
   if (includes(cards, location.id)) {
-    actions.push({ type: BUILD_RESEARCH_CENTER, at: location.id });
+    actions.push({
+      type: BUILD_RESEARCH_CENTER,
+      player: currentPlayer,
+      at: location.id,
+      card: location.id,
+    });
   }
   // DISCOVER_CURE
   const cardsByDisease = groupBy(cards, (c => locationsMap[c].disease));
@@ -188,7 +215,12 @@ export function getValidActions(state = initialState) {
       .filter(pair => pair[1].length >= 5)
       .map((pair) => {
         const usedCards = take(pair[1], 5);
-        return { type: DISCOVER_CURE, disease: pair[0], usedCards };
+        return {
+          type: DISCOVER_CURE,
+          player: currentPlayer,
+          disease: pair[0],
+          usedCards,
+        };
       }),
   );
   // TREAT_DISEASE
@@ -196,7 +228,12 @@ export function getValidActions(state = initialState) {
     actions.push(
       toPairs(infections[location.id])
         .filter(pair => pair[1] > 0)
-        .map(pair => ({ type: TREAT_DISEASE, disease: pair[0], at: location.id })),
+        .map(pair => ({
+          type: TREAT_DISEASE,
+          player: currentPlayer,
+          disease: pair[0],
+          at: location.id,
+        })),
     );
   }
   // SHARE_KNOWLEDGE
@@ -217,6 +254,7 @@ export function getValidActions(state = initialState) {
         if (includes(playerCards[id], location.id)) {
           actions.push({
             type: SHARE_KNOWLEDGE,
+            player: currentPlayer,
             card: location.id,
             from: id,
             to: currentPlayer,
