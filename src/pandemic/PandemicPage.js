@@ -1,25 +1,34 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
+import { getGameState, getSearchTreeRoot } from './redux';
 import {
   Container, Title,
 } from '../components/Page';
 
-import * as pandemic from '.';
-import initialState from './initialState.json';
-import monteCarloTreeSearch from '../monteCarloTreeSearch';
-
-const PandemicPage = () => {
-  const state = initialState;
-  console.log('Pandemic initial state', state);
-  console.log('Pandemic valid actions', pandemic.getValidActions(state));
-  const root = monteCarloTreeSearch(pandemic, state);
-  console.log('Search tree root', root);
+const PandemicPage = ({ gameState, searchTreeRoot }) => {
+  console.log('Pandemic initial state', gameState);
+  console.log('Search tree root', searchTreeRoot);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Pandemic</Title>
     </Container>
   );
 };
+PandemicPage.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  gameState: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  searchTreeRoot: PropTypes.object,
+};
+PandemicPage.defaultProps = {
+  searchTreeRoot: null,
+};
 
-export default PandemicPage;
+const mapStateToProps = state => ({
+  gameState: getGameState(state),
+  searchTreeRoot: getSearchTreeRoot(state),
+});
+export default connect(mapStateToProps)(PandemicPage);

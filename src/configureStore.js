@@ -4,11 +4,12 @@ import { routerMiddleware, connectRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 
 import connectFourReducer from './connectFour/redux';
+import pandemicReducer from './pandemic/redux';
 
 export const history = createHistory();
 const rootReducer = combineReducers({
   connectFour: connectFourReducer,
-
+  pandemic: pandemicReducer,
 });
 const epicMiddleware = createEpicMiddleware();
 
