@@ -12,6 +12,7 @@ export const Section = styled.div`
 `;
 export const Title = styled.h1`
   font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 33px;
   margin: 0;
   padding: 0 0 16px 0;
 `;
@@ -23,4 +24,10 @@ export const Label = styled.label`
 `;
 export const Row = styled.div`
   display: flex;
+`;
+export const SectionTitle = styled.h2`
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 21px;
+  margin: 0;
+  padding: 0 0 8px 0;
 `;
