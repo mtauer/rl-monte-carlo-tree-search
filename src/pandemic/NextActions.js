@@ -37,9 +37,10 @@ const ActionContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 12px 12px;
+  padding: 12px 12px 10px 12px;
 `;
 const ActionTitle = styled.p`
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 21px;
   margin: 0;
@@ -49,12 +50,15 @@ const ActionDetails = styled.div`
   display: flex;
 `;
 const Property = styled.p`
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
   display: block;
   font-size: 12px;
-  margin: 0 8px 3px 0;
-  padding: 3px 6px 3px 6px;
+  margin: 0;
+  padding: 6px 10px 2px 10px;
+
+  &:first-child {
+    padding-left: 0;
+  }
 `;
 const PropertyName = styled.span`
   display: inline-block;
