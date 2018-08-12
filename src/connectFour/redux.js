@@ -3,7 +3,7 @@ import { map, filter } from 'rxjs/operators';
 import cloneDeep from 'lodash/cloneDeep';
 
 import * as connectFour from './connectFour';
-import monteCarloTreeSearch, { monteCarloTreeSearchPerformAction } from './monteCarloTreeSearch';
+import monteCarloTreeSearch, { monteCarloTreeSearchPerformAction } from '../monteCarloTreeSearch';
 
 const { E, X } = connectFour;
 
@@ -34,7 +34,7 @@ export function performGameActionAction(gameAction) {
   return { type: PERFORM_GAME_ACTION, gameAction };
 }
 
-export default function monteCarloTreeSearchReducer(state = initialState, action) {
+export default function connectFourReducer(state = initialState, action) {
   switch (action.type) {
     case SET_SEARCH_TREE_ROOT: {
       const { searchTreeRoot } = action;
@@ -59,17 +59,18 @@ export default function monteCarloTreeSearchReducer(state = initialState, action
 }
 
 export function getGameState(state) {
-  return state.gameState;
+  return state.connectFour.gameState;
 }
 
 export function getSearchTreeRoot(state) {
-  return state.searchTreeRoot;
+  return state.connectFour.searchTreeRoot;
 }
 
-export function monteCarloTreeSearchEpic(action$, state$) {
+export function simulateConnectFourEpic(action$, state$) {
   return interval(150).pipe(
     map(() => {
-      const { gameState, searchTreeRoot } = state$.value;
+      const gameState = getGameState(state$.value);
+      const searchTreeRoot = getSearchTreeRoot(state$.value);
       const root = monteCarloTreeSearch(connectFour, gameState, searchTreeRoot);
       return setSearchTreeRootAction(cloneDeep(root));
     }),

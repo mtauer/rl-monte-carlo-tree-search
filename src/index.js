@@ -1,26 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { createEpicMiddleware } from 'redux-observable';
+import { ConnectedRouter } from 'connected-react-router';
+import { Route, Switch, Redirect } from 'react-router';
 
-import monteCarloTreeSearchReducer from './monteCarloTreeSearchRedux';
+import store, { history } from './configureStore';
 import registerServiceWorker from './registerServiceWorker';
-import App from './App';
+import ConnectFourPage from './connectFour/ConnectFourPage';
 import './index.css';
 
-const epicMiddleware = createEpicMiddleware();
-const store = createStore(
-  monteCarloTreeSearchReducer,
-  applyMiddleware(epicMiddleware),
-);
-// TODO Uncomment run enable epics
-// epicMiddleware.run(combineEpics(monteCarloTreeSearchEpic));
 const target = document.getElementById('root');
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ConnectedRouter history={history}>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/connect-4" />
+        </Route>
+        <Route exact path="/connect-4" component={ConnectFourPage} />
+      </Switch>
+    </ConnectedRouter>
   </Provider>,
   target,
 );

@@ -6,13 +6,13 @@ import { connect } from 'react-redux';
 import fromPairs from 'lodash/fromPairs';
 import range from 'lodash/range';
 
-import * as pandemic from './pandemic';
-import initialState from './pandemic/initialState.json';
-import monteCarloTreeSearch from './monteCarloTreeSearch';
-import { getGameState, getSearchTreeRoot, performGameActionAction } from './monteCarloTreeSearchRedux';
+import { getGameState, getSearchTreeRoot, performGameActionAction } from './redux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
-import './App.css';
+
+import * as pandemic from '../pandemic';
+import initialState from '../pandemic/initialState.json';
+import monteCarloTreeSearch from '../monteCarloTreeSearch';
 
 const Container = styled.div`
   background-color: #ffffff;
