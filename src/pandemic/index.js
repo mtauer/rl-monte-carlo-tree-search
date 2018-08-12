@@ -339,8 +339,9 @@ export function performAction(state = initialState, action) {
     if (newState.unplayedPlayerCards.length <= 2) {
       newState.insufficientPlayerCards = true;
     } else {
-      const newCards = take(unplayedPlayerCards, 2);
-      newState.unplayedPlayerCards = slice(unplayedPlayerCards, 2);
+      const shuffledCards = shuffle(unplayedPlayerCards);
+      const newCards = take(shuffledCards, 2);
+      newState.unplayedPlayerCards = slice(shuffledCards, 2);
       newState.playerCards[currentPlayer] = [...cards, ...newCards.filter(id => id < 48)];
     }
     // End of turn
