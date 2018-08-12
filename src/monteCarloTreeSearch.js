@@ -16,7 +16,7 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
   if (initialRoot) {
     root = initialRoot;
   } else {
-    root = new MonteCarloTreeSearchNode(null, state);
+    root = new MonteCarloTreeSearchNode(null);
     root.setChildren(getNewNodes(game, state));
   }
   while ((performance.now() - startTime) < options.learningTimeInMs) {
@@ -68,7 +68,6 @@ function getNewNodes(game, state) {
   const validActions = game.getValidActions(state);
   const newNodes = validActions.map(action => new MonteCarloTreeSearchNode(
     action,
-    game.performAction(state, action),
   ));
   return newNodes;
 }
@@ -111,7 +110,7 @@ function calculateUCB1Values(node, root = node, maximize = true) {
 }
 
 class MonteCarloTreeSearchNode {
-  constructor(action, state) {
+  constructor(action) {
     this.parent = null;
     this.children = [];
     this.deepValue = 0;
@@ -119,7 +118,6 @@ class MonteCarloTreeSearchNode {
     this.ucb1 = Number.POSITIVE_INFINITY;
     this.isFinished = false;
     this.action = action;
-    this.state = state;
   }
 
   isLeaf() {
