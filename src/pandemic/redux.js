@@ -1,5 +1,5 @@
-import { interval } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { interval, empty } from 'rxjs';
+import { filter, switchMap, map } from 'rxjs/operators';
 import cloneDeep from 'lodash/cloneDeep';
 
 import initialGameState from './initialState.json';
@@ -10,11 +10,13 @@ import monteCarloTreeSearch from '../monteCarloTreeSearch';
 const initialState = {
   gameState: initialGameState,
   searchTreeRoot: null,
+  isSimulationActive: false,
 };
 
 const PREFIX = 'pandemic/';
 export const SET_SEARCH_TREE_ROOT = `${PREFIX}SET_SEARCH_TREE_ROOT`;
 export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`;
+export const SET_SIMULATION_ACTIVE = `${PREFIX}SET_SIMULATION_ACTIVE`;
 
 export function setSearchTreeRootAction(searchTreeRoot) {
   return { type: SET_SEARCH_TREE_ROOT, searchTreeRoot };
@@ -22,6 +24,10 @@ export function setSearchTreeRootAction(searchTreeRoot) {
 
 export function performGameActionAction(gameAction) {
   return { type: PERFORM_GAME_ACTION, gameAction };
+}
+
+export function setSimulationActiveAction(isActive) {
+  return { type: SET_SIMULATION_ACTIVE, isActive };
 }
 
 export default function pandemicReducer(state = initialState, action) {
@@ -46,6 +52,13 @@ export default function pandemicReducer(state = initialState, action) {
         searchTreeRoot: newSearchTreeRoot,
       };
     }
+    case SET_SIMULATION_ACTIVE: {
+      const { isActive } = action;
+      return {
+        ...state,
+        isSimulationActive: isActive,
+      };
+    }
     default: return state;
   }
 }
@@ -58,13 +71,26 @@ export function getSearchTreeRoot(state) {
   return state.pandemic.searchTreeRoot;
 }
 
+export function getIsSimulationAction(state) {
+  return state.pandemic.isSimulationActive;
+}
+
 export function simulatePandemicEpic(action$, state$) {
-  return interval(150).pipe(
-    map(() => {
-      const gameState = getGameState(state$.value);
-      const searchTreeRoot = getSearchTreeRoot(state$.value);
-      const root = monteCarloTreeSearch(pandemic, gameState, searchTreeRoot);
-      return setSearchTreeRootAction(cloneDeep(root));
+  return action$.pipe(
+    filter(action => action.type === SET_SIMULATION_ACTIVE),
+    switchMap(() => {
+      const isActive = getIsSimulationAction(state$.value);
+      if (isActive) {
+        return interval(150).pipe(
+          map(() => {
+            const gameState = getGameState(state$.value);
+            const searchTreeRoot = getSearchTreeRoot(state$.value);
+            const root = monteCarloTreeSearch(pandemic, gameState, searchTreeRoot);
+            return setSearchTreeRootAction(cloneDeep(root));
+          }),
+        );
+      }
+      return empty();
     }),
   );
 }

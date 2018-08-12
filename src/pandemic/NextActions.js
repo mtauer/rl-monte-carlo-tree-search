@@ -24,6 +24,10 @@ const Row = styled.div`
   display: flex;
   margin-bottom: 1px;
   height: 80px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const ValueContainer = styled.div`
   align-items: center;
