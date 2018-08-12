@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import fromPairs from 'lodash/fromPairs';
 import range from 'lodash/range';
@@ -9,32 +8,9 @@ import range from 'lodash/range';
 import { getGameState, getSearchTreeRoot, performGameActionAction } from './redux';
 import ConnectFourBoard from './ConnectFourBoard';
 import ConnectFourBoardAnalysis from './ConnectFourBoardAnalysis';
-
-import * as pandemic from '../pandemic';
-import initialState from '../pandemic/initialState.json';
-import monteCarloTreeSearch from '../monteCarloTreeSearch';
-
-const Container = styled.div`
-  background-color: #ffffff;
-  margin: 0 auto;
-  max-width: 800px;
-  min-height: 100vh;
-  padding: 32px 48px;
-`;
-const Section = styled.div`
-  padding: 0 0 32px 0;
-`;
-const Title = styled.h1`
-  font-family: 'IBM Plex Sans', sans-serif;
-  margin: 0;
-  padding: 0 0 16px 0;
-`;
-const Label = styled.label`
-  display: block;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  padding: 0 0 8px 0;
-`;
+import {
+  Container, Section, Title, Label,
+} from '../components/Page';
 
 const ConnectFourPage = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionNodes = searchTreeRoot ? searchTreeRoot.children : [];
@@ -44,11 +20,6 @@ const ConnectFourPage = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionsUcb1Map = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.ucb1]),
   );
-  const state = initialState;
-  console.log('Pandemic initial state', state);
-  console.log('Pandemic valid actions', pandemic.getValidActions(state));
-  const root = monteCarloTreeSearch(pandemic, state);
-  console.log('Search tree root', root);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Connect 4</Title>
