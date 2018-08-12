@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import sample from 'lodash/sample';
 import maxBy from 'lodash/maxBy';
 import first from 'lodash/first';
+import repeat from 'lodash/repeat';
 
 const options = {
   learningTimeInMs: 100,
@@ -131,5 +132,13 @@ class MonteCarloTreeSearchNode {
 
   getFirstChildren() {
     return this.children[0];
+  }
+
+  print(depth = 0, action) {
+    // eslint-disable-next-line no-console
+    console.log(repeat('  ', depth), '+-', action || 'ROOT');
+    this.children.forEach((child) => {
+      child.print(depth + 1, child.action);
+    });
   }
 }
