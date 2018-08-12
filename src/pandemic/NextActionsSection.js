@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { getSearchTreeRoot, performGameActionAction } from './redux';
 import { Section, Label, Row } from '../components/Page';
 import BarChart from './BarChart';
 import NextActions from './NextActions';
@@ -14,7 +16,7 @@ const NextActionsContainer = styled.div`
   flex: 1;
 `;
 
-const NextActionsSection = ({ gameResult }) => {
+const NextActionsSection = ({ gameResult, onActionClick }) => {
   const nextActionNodes = gameResult ? gameResult.children : [];
   const ucb1Values = nextActionNodes.map(n => n.ucb1);
   const deepCountValues = nextActionNodes.map(n => n.deepCount);
@@ -39,6 +41,7 @@ const NextActionsSection = ({ gameResult }) => {
         <NextActionsContainer>
           <NextActions
             gameResult={gameResult}
+            onActionClick={onActionClick}
           />
         </NextActionsContainer>
       </Row>
@@ -48,9 +51,17 @@ const NextActionsSection = ({ gameResult }) => {
 NextActionsSection.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameResult: PropTypes.object,
+  onActionClick: PropTypes.func,
 };
 NextActionsSection.defaultProps = {
   gameResult: null,
+  onActionClick: () => {},
 };
 
-export default NextActionsSection;
+const mapStateToProps = state => ({
+  gameResult: getSearchTreeRoot(state),
+});
+const mapDispatchToProps = dispatch => ({
+  onActionClick: action => dispatch(performGameActionAction({ action })),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(NextActionsSection);

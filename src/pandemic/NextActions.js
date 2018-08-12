@@ -76,7 +76,7 @@ const Disease = styled.span`
   transform: translateY(1px);
 `;
 
-const NextActions = ({ gameResult }) => {
+const NextActions = ({ gameResult, onActionClick }) => {
   const nextActionNodes = gameResult ? gameResult.children : [];
   const nextActions = nextActionNodes.map(n => n.action);
   const nextActionValuesMap = fromPairs(
@@ -88,7 +88,10 @@ const NextActions = ({ gameResult }) => {
         const nextActionValue = nextActionValuesMap[i];
         const cellBgColor = nextActionValue !== undefined ? getCellBgColor(nextActionValue) : '#e6e6e6';
         return (
-          <Row key={i}>
+          <Row
+            key={i}
+            onClick={() => { onActionClick(action); }}
+          >
             <ValueContainer style={{ backgroundColor: cellBgColor }}>
               <Value>
                 {nextActionValue !== undefined ? nextActionValue.toFixed(3) : ''}
@@ -111,9 +114,11 @@ const NextActions = ({ gameResult }) => {
 NextActions.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameResult: PropTypes.object,
+  onActionClick: PropTypes.func,
 };
 NextActions.defaultProps = {
   gameResult: null,
+  onActionClick: () => {},
 };
 
 function formatActionType(type) {

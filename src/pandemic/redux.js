@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import initialGameState from './initialState.json';
 
 import * as pandemic from '.';
-import monteCarloTreeSearch from '../monteCarloTreeSearch';
+import monteCarloTreeSearch, { monteCarloTreeSearchPerformAction } from '../monteCarloTreeSearch';
 
 const initialState = {
   gameState: initialGameState,
@@ -14,9 +14,14 @@ const initialState = {
 
 const PREFIX = 'pandemic/';
 export const SET_SEARCH_TREE_ROOT = `${PREFIX}SET_SEARCH_TREE_ROOT`;
+export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`;
 
 export function setSearchTreeRootAction(searchTreeRoot) {
   return { type: SET_SEARCH_TREE_ROOT, searchTreeRoot };
+}
+
+export function performGameActionAction(gameAction) {
+  return { type: PERFORM_GAME_ACTION, gameAction };
 }
 
 export default function pandemicReducer(state = initialState, action) {
@@ -26,6 +31,17 @@ export default function pandemicReducer(state = initialState, action) {
       return {
         ...state,
         searchTreeRoot,
+      };
+    }
+    case PERFORM_GAME_ACTION: {
+      const { gameState, searchTreeRoot } = state;
+      const { gameAction } = action;
+      const newGameState = pandemic.performAction(gameState, gameAction);
+      const newSearchTreeRoot = monteCarloTreeSearchPerformAction(searchTreeRoot, gameAction);
+      return {
+        ...state,
+        gameState: newGameState,
+        searchTreeRoot: newSearchTreeRoot,
       };
     }
     default: return state;
