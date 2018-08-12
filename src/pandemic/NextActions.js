@@ -50,10 +50,11 @@ const ActionDetails = styled.div`
 `;
 const Property = styled.p`
   background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
   display: block;
   font-size: 12px;
   margin: 0 8px 3px 0;
-  padding: 2px 6px 4px 6px;
+  padding: 3px 6px 3px 6px;
 `;
 const PropertyName = styled.span`
   display: inline-block;
