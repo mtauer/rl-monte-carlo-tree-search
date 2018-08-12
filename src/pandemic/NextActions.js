@@ -93,7 +93,7 @@ const NextActions = ({ gameResult, onActionClick }) => {
           >
             <ValueContainer style={{ backgroundColor: cellBgColor }}>
               <Value>
-                {nextActionValue !== undefined ? nextActionValue.toFixed(3) : ''}
+                {nextActionValue !== undefined && !Number.isNaN(nextActionValue) ? nextActionValue.toFixed(3) : '-'}
               </Value>
             </ValueContainer>
             <ActionContainer style={{ backgroundColor: cellBgColor }}>
