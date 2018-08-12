@@ -36,7 +36,7 @@ const Label = styled.label`
   padding: 0 0 8px 0;
 `;
 
-const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
+const ConnectFourPage = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
   const nextActionNodes = searchTreeRoot ? searchTreeRoot.children : [];
   const nextActionsCountMap = fromPairs(
     nextActionNodes.map(n => [n.action.index, n.deepCount]),
@@ -75,14 +75,14 @@ const App = ({ gameState, searchTreeRoot, onBoardCellClick }) => {
     </Container>
   );
 };
-App.propTypes = {
+ConnectFourPage.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   searchTreeRoot: PropTypes.object,
   onBoardCellClick: PropTypes.func.isRequired,
 };
-App.defaultProps = {
+ConnectFourPage.defaultProps = {
   searchTreeRoot: null,
 };
 
@@ -93,4 +93,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onBoardCellClick: (row, col) => dispatch(performGameActionAction({ index: col })),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectFourPage);
