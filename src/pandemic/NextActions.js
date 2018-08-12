@@ -9,11 +9,12 @@ import { rgb } from 'd3-color';
 import { interpolateHcl } from 'd3-interpolate';
 
 import {
-  locationsMap, DRIVE_FERRY, DIRECT_FLIGHT, TREAT_DISEASE,
+  locationsMap, DRIVE_FERRY, DIRECT_FLIGHT, TREAT_DISEASE, DISCOVER_CURE,
 } from '.';
 import {
   DISEASE_YELLOW, DISEASE_RED, DISEASE_BLUE, DISEASE_BLACK,
 } from './constants';
+import Location from './Location';
 
 const Container = styled.div`
 `;
@@ -128,6 +129,7 @@ function formatActionType(type) {
     case DRIVE_FERRY: return 'Drive / Ferry';
     case DIRECT_FLIGHT: return 'Direct Flight';
     case TREAT_DISEASE: return 'Treat Disease';
+    case DISCOVER_CURE: return 'Discover Cure';
     default: return type;
   }
 }
@@ -138,15 +140,11 @@ function formatActionDetails(action) {
       return [
         <Property key="from">
           <PropertyName>From:</PropertyName>
-          <PropertyValue>
-            {formatLocationName(action.from)} {formatLocationDisease(action.from)}
-          </PropertyValue>
+          <PropertyValue><Location locationId={action.from} /></PropertyValue>
         </Property>,
         <Property key="to">
           <PropertyName>To:</PropertyName>
-          <PropertyValue>
-            {formatLocationName(action.to)} {formatLocationDisease(action.to)}
-          </PropertyValue>
+          <PropertyValue><Location locationId={action.to} /></PropertyValue>
         </Property>,
       ];
     }
@@ -154,21 +152,15 @@ function formatActionDetails(action) {
       return [
         <Property key="from">
           <PropertyName>From:</PropertyName>
-          <PropertyValue>
-            {formatLocationName(action.from)}{formatLocationDisease(action.from)}
-          </PropertyValue>
+          <PropertyValue><Location locationId={action.from} /></PropertyValue>
         </Property>,
         <Property key="to">
           <PropertyName>To:</PropertyName>
-          <PropertyValue>
-            {formatLocationName(action.to)}{formatLocationDisease(action.to)}
-          </PropertyValue>
+          <PropertyValue><Location locationId={action.to} /></PropertyValue>
         </Property>,
         <Property key="card">
           <PropertyName>Card:</PropertyName>
-          <PropertyValue>
-            {formatLocationName(action.card)}{formatLocationDisease(action.card)}
-          </PropertyValue>
+          <PropertyValue><Location locationId={action.card} /></PropertyValue>
         </Property>,
       ];
     }
@@ -188,16 +180,30 @@ function formatActionDetails(action) {
         </Property>,
       ];
     }
+    case DISCOVER_CURE: {
+      return [
+        <Property key="disease">
+          <PropertyName>Disease:</PropertyName>
+          <PropertyValue>
+            {formatDisease(action.disease)}
+          </PropertyValue>
+        </Property>,
+        <Property key="cards">
+          <PropertyName>Cards:</PropertyName>
+          <PropertyValue>
+            { action.usedCards.map(id => (
+              <Location key={id} locationId={id} />
+            ))}
+          </PropertyValue>
+        </Property>,
+      ];
+    }
     default: return null;
   }
 }
 
 function formatLocationName(id) {
   return locationsMap[id].name;
-}
-
-function formatLocationDisease(id) {
-  return formatDisease(locationsMap[id].disease);
 }
 
 function formatDisease(disease) {

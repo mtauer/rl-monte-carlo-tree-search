@@ -8,9 +8,12 @@ import { getGameState } from './redux';
 import {
   Section, SectionTitle, Row, Label,
 } from '../components/Page';
+import Location from './Location';
 
 const PlayerContainer = styled.div`
   flex: 1;
+`;
+const Card = styled.div`
 `;
 
 const PlayersSection = ({ players }) => (
@@ -19,7 +22,13 @@ const PlayersSection = ({ players }) => (
       { players.map(player => (
         <PlayerContainer key={player.id}>
           <SectionTitle>Player {player.id}</SectionTitle>
-          <Label>Position: {player.position}</Label>
+          <Label>Position: <Location locationId={player.position} /></Label>
+          <Label>Cards:</Label>
+          { player.cards.map(card => (
+            <Card key={card}>
+              <Location locationId={card} />
+            </Card>
+          ))}
         </PlayerContainer>
       ))}
     </Row>
