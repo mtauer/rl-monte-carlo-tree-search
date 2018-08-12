@@ -3,7 +3,7 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { routerMiddleware, connectRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 
-import connectFourReducer, { simulateConnectFourEpic } from './connectFour/redux';
+import connectFourReducer from './connectFour/redux';
 
 export const history = createHistory();
 const rootReducer = combineReducers({
@@ -18,7 +18,8 @@ const store = createStore(
 );
 
 epicMiddleware.run(combineEpics(
-  simulateConnectFourEpic,
+  // TODO Enable Connect 4 simulation again
+  // simulateConnectFourEpic,
 ));
 
 export default store;
