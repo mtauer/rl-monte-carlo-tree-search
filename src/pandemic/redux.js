@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import initialGameState from './initialState.json';
 
 import * as pandemic from '.';
-import monteCarloTreeSearch, { monteCarloTreeSearchPerformAction } from '../monteCarloTreeSearch';
+import monteCarloTreeSearch from '../monteCarloTreeSearch';
 
 const initialState = {
   gameState: initialGameState,
@@ -34,10 +34,12 @@ export default function pandemicReducer(state = initialState, action) {
       };
     }
     case PERFORM_GAME_ACTION: {
-      const { gameState, searchTreeRoot } = state;
+      const { gameState } = state;
       const { gameAction } = action;
       const newGameState = pandemic.performAction(gameState, gameAction);
-      const newSearchTreeRoot = monteCarloTreeSearchPerformAction(searchTreeRoot, gameAction);
+      // TODO Investigate if and how monteCarloTreeSearchPerformAction could be
+      // used for non-deterministic MDPs.
+      const newSearchTreeRoot = null;
       return {
         ...state,
         gameState: newGameState,
