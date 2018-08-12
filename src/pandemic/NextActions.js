@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
