@@ -31,11 +31,11 @@ Location.propTypes = {
 };
 
 function formatLocationName(id) {
-  return locationsMap[id].name;
+  return locationsMap[id] ? locationsMap[id].name : 'Unknown location';
 }
 
 function formatLocationDisease(id) {
-  return formatDisease(locationsMap[id].disease);
+  return locationsMap[id] ? formatDisease(locationsMap[id].disease) : null;
 }
 
 function formatDisease(disease) {

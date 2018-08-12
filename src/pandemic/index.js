@@ -154,9 +154,6 @@ export function getValidActions(state = initialState) {
   const location = locationsMap[playerPosition[currentPlayer]];
   const cards = playerCards[currentPlayer];
   const actions = [];
-  // TODO Enable do nothing as action again
-  // DO_NOTHING
-  // actions.push({ type: DO_NOTHING });
   // DRIVE_FERRY
   actions.push(location.connectedLocations.map(id => ({
     type: DRIVE_FERRY,
@@ -264,6 +261,12 @@ export function getValidActions(state = initialState) {
       });
     }
   }
+  // TODO Enable do nothing as valid action again
+  // DO_NOTHING
+  // actions.push({
+  //   type: DO_NOTHING,
+  //   player: currentPlayer,
+  // });
   return flatten(actions);
 }
 

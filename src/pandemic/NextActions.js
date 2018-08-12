@@ -9,7 +9,9 @@ import { rgb } from 'd3-color';
 import { interpolateHcl } from 'd3-interpolate';
 
 import {
-  locationsMap, DRIVE_FERRY, DIRECT_FLIGHT, TREAT_DISEASE, DISCOVER_CURE,
+  locationsMap, DRIVE_FERRY, DIRECT_FLIGHT, CHARTER_FLIGHT, SHUTTLE_FLIGHT,
+  BUILD_RESEARCH_CENTER, TREAT_DISEASE, DISCOVER_CURE, SHARE_KNOWLEDGE,
+  DO_NOTHING,
 } from '.';
 import {
   DISEASE_YELLOW, DISEASE_RED, DISEASE_BLUE, DISEASE_BLACK,
@@ -128,8 +130,13 @@ function formatActionType(type) {
   switch (type) {
     case DRIVE_FERRY: return 'Drive / Ferry';
     case DIRECT_FLIGHT: return 'Direct Flight';
+    case CHARTER_FLIGHT: return 'Charter Flight';
+    case SHUTTLE_FLIGHT: return 'Shuttle Flight';
+    case BUILD_RESEARCH_CENTER: return 'Build Research Center';
     case TREAT_DISEASE: return 'Treat Disease';
     case DISCOVER_CURE: return 'Discover Cure';
+    case SHARE_KNOWLEDGE: return 'Share Knowledge';
+    case DO_NOTHING: return 'Do Nothing';
     default: return type;
   }
 }
@@ -157,6 +164,46 @@ function formatActionDetails(action) {
         <Property key="to">
           <PropertyName>To:</PropertyName>
           <PropertyValue><Location locationId={action.to} /></PropertyValue>
+        </Property>,
+        <Property key="card">
+          <PropertyName>Card:</PropertyName>
+          <PropertyValue><Location locationId={action.card} /></PropertyValue>
+        </Property>,
+      ];
+    }
+    case CHARTER_FLIGHT: {
+      return [
+        <Property key="from">
+          <PropertyName>From:</PropertyName>
+          <PropertyValue><Location locationId={action.from} /></PropertyValue>
+        </Property>,
+        <Property key="to">
+          <PropertyName>To:</PropertyName>
+          <PropertyValue><Location locationId={action.to} /></PropertyValue>
+        </Property>,
+        <Property key="card">
+          <PropertyName>Card:</PropertyName>
+          <PropertyValue><Location locationId={action.card} /></PropertyValue>
+        </Property>,
+      ];
+    }
+    case SHUTTLE_FLIGHT: {
+      return [
+        <Property key="from">
+          <PropertyName>From:</PropertyName>
+          <PropertyValue><Location locationId={action.from} /></PropertyValue>
+        </Property>,
+        <Property key="to">
+          <PropertyName>To:</PropertyName>
+          <PropertyValue><Location locationId={action.to} /></PropertyValue>
+        </Property>,
+      ];
+    }
+    case BUILD_RESEARCH_CENTER: {
+      return [
+        <Property key="at">
+          <PropertyName>At:</PropertyName>
+          <PropertyValue><Location locationId={action.at} /></PropertyValue>
         </Property>,
         <Property key="card">
           <PropertyName>Card:</PropertyName>
@@ -195,6 +242,22 @@ function formatActionDetails(action) {
               <Location key={id} locationId={id} />
             ))}
           </PropertyValue>
+        </Property>,
+      ];
+    }
+    case SHARE_KNOWLEDGE: {
+      return [
+        <Property key="card">
+          <PropertyName>Card:</PropertyName>
+          <PropertyValue><Location locationId={action.card} /></PropertyValue>
+        </Property>,
+        <Property key="from">
+          <PropertyName>From Player:</PropertyName>
+          <PropertyValue>{action.from}</PropertyValue>
+        </Property>,
+        <Property key="to">
+          <PropertyName>To Player:</PropertyName>
+          <PropertyValue>{action.to}</PropertyValue>
         </Property>,
       ];
     }
