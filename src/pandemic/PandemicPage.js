@@ -4,16 +4,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getGameState, getSearchTreeRoot } from './redux';
+import PandemicActions from './PandemicActions';
 import {
-  Container, Title,
+  Container, Title, Section, Label,
 } from '../components/Page';
 
 const PandemicPage = ({ gameState, searchTreeRoot }) => {
   console.log('Pandemic initial state', gameState);
-  console.log('Search tree root', searchTreeRoot);
   return (
     <Container>
       <Title>Monte Carlo Tree Search for Pandemic</Title>
+      <Section>
+        <Label>Next actions</Label>
+        <PandemicActions
+          gameResult={searchTreeRoot}
+        />
+      </Section>
     </Container>
   );
 };
