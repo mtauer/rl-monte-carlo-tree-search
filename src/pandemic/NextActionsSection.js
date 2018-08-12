@@ -33,7 +33,7 @@ const NextActionsSection = ({ gameState, gameResult, onActionClick }) => {
             values={ucb1Values}
             color="#91bfdb"
             offset={-1}
-            formatFunc={f => f.toFixed(3)}
+            formatFunc={f => (f === Number.POSITIVE_INFINITY ? '∞' : f.toFixed(3))}
           />
         </BarChartContainer>
         <BarChartContainer>

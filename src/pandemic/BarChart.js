@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import max from 'lodash/max';
+import isFinite from 'lodash/isFinite';
 
 const Chart = styled.div`
   display: grid;
@@ -44,7 +45,7 @@ const BarChart = ({
   return (
     <Chart size={size}>
       { values.map((v, i) => {
-        const barWidth = v === undefined || (v - offset) < 0 ? 0 : size * (v - offset) / maxValue;
+        const barWidth = !isFinite(v) || (v - offset) < 0 ? 0 : size * (v - offset) / maxValue;
         return (
           <Cell key={`next-action-bar-${i}`}>
             <CellBar style={{ width: `${barWidth}px`, backgroundColor: color }} />
