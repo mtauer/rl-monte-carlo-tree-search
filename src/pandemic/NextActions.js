@@ -21,6 +21,7 @@ const Container = styled.div`
 const Row = styled.div`
   display: flex;
   margin-bottom: 1px;
+  height: 80px;
 `;
 const ValueContainer = styled.div`
   align-items: center;
@@ -51,7 +52,7 @@ const Property = styled.p`
   background-color: rgba(255, 255, 255, 0.2);
   display: block;
   font-size: 12px;
-  margin: 0 8px 4px 0;
+  margin: 0 8px 3px 0;
   padding: 2px 6px 4px 6px;
 `;
 const PropertyName = styled.span`
@@ -70,7 +71,7 @@ const Disease = styled.span`
   transform: translateY(1px);
 `;
 
-const PandemicActions = ({ gameResult }) => {
+const NextActions = ({ gameResult }) => {
   const nextActionNodes = gameResult ? gameResult.children : [];
   const nextActions = nextActionNodes.map(n => n.action);
   const nextActionValuesMap = fromPairs(
@@ -102,11 +103,11 @@ const PandemicActions = ({ gameResult }) => {
     </Container>
   );
 };
-PandemicActions.propTypes = {
+NextActions.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   gameResult: PropTypes.object,
 };
-PandemicActions.defaultProps = {
+NextActions.defaultProps = {
   gameResult: null,
 };
 
@@ -218,4 +219,4 @@ function getCellBgColor(value) {
   return valueColor(value);
 }
 
-export default PandemicActions;
+export default NextActions;
