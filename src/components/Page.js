@@ -21,3 +21,6 @@ export const Label = styled.label`
   font-size: 12px;
   padding: 0 0 8px 0;
 `;
+export const Row = styled.div`
+  display: flex;
+`;

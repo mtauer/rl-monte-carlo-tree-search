@@ -124,10 +124,6 @@ function formatActionDetails(action) {
   switch (action.type) {
     case DRIVE_FERRY: {
       return [
-        <Property key="player">
-          <PropertyName>Player:</PropertyName>
-          <PropertyValue>{action.player}</PropertyValue>
-        </Property>,
         <Property key="from">
           <PropertyName>From:</PropertyName>
           <PropertyValue>
@@ -144,10 +140,6 @@ function formatActionDetails(action) {
     }
     case DIRECT_FLIGHT: {
       return [
-        <Property key="player">
-          <PropertyName>Player:</PropertyName>
-          <PropertyValue>{action.player}</PropertyValue>
-        </Property>,
         <Property key="from">
           <PropertyName>From:</PropertyName>
           <PropertyValue>
@@ -170,10 +162,6 @@ function formatActionDetails(action) {
     }
     case TREAT_DISEASE: {
       return [
-        <Property key="player">
-          <PropertyName>Player:</PropertyName>
-          <PropertyValue>{action.player}</PropertyValue>
-        </Property>,
         <Property key="at">
           <PropertyName>At:</PropertyName>
           <PropertyValue>
