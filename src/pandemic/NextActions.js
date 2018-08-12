@@ -37,6 +37,7 @@ const ActionContainer = styled.div`
   flex: 1;
   flex-direction: column;
   padding: 12px 12px 10px 12px;
+  overflow: hidden;
 `;
 const ActionTitle = styled.p`
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
@@ -54,6 +55,8 @@ const Property = styled.p`
   font-size: 12px;
   margin: 0;
   padding: 6px 10px 2px 10px;
+  white-space: nowrap;
+  overflow: hidden;
 
   &:first-child {
     padding-left: 0;
