@@ -9,7 +9,7 @@ import monteCarloTreeSearch from '../monteCarloTreeSearch';
 
 const initialState = {
   gameState: initialGameState,
-  searchTreeRoot: monteCarloTreeSearch(pandemic, initialGameState),
+  searchTreeRoot: null,
 };
 
 const PREFIX = 'pandemic/';
