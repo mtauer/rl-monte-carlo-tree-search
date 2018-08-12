@@ -11,12 +11,14 @@ const initialState = {
   gameState: initialGameState,
   searchTreeRoot: null,
   isSimulationActive: false,
+  isAutoPlayActive: false,
 };
 
 const PREFIX = 'pandemic/';
 export const SET_SEARCH_TREE_ROOT = `${PREFIX}SET_SEARCH_TREE_ROOT`;
 export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`;
 export const SET_SIMULATION_ACTIVE = `${PREFIX}SET_SIMULATION_ACTIVE`;
+export const SET_AUTO_PLAY_ACTIVE = `${PREFIX}SET_AUTO_PLAY_ACTIVE`;
 
 export function setSearchTreeRootAction(searchTreeRoot) {
   return { type: SET_SEARCH_TREE_ROOT, searchTreeRoot };
@@ -28,6 +30,10 @@ export function performGameActionAction(gameAction) {
 
 export function setSimulationActiveAction(isActive) {
   return { type: SET_SIMULATION_ACTIVE, isActive };
+}
+
+export function setAutoPlayActiveAction(isActive) {
+  return { type: SET_AUTO_PLAY_ACTIVE, isActive };
 }
 
 export default function pandemicReducer(state = initialState, action) {
@@ -57,6 +63,15 @@ export default function pandemicReducer(state = initialState, action) {
       return {
         ...state,
         isSimulationActive: isActive,
+        isAutoPlayActive: isActive ? false : state.isAutoPlayActive,
+      };
+    }
+    case SET_AUTO_PLAY_ACTIVE: {
+      const { isActive } = action;
+      return {
+        ...state,
+        isSimulationActive: isActive ? false : state.isSimulationActive,
+        isAutoPlayActive: isActive,
       };
     }
     default: return state;
@@ -71,15 +86,19 @@ export function getSearchTreeRoot(state) {
   return state.pandemic.searchTreeRoot;
 }
 
-export function getIsSimulationAction(state) {
+export function getIsSimulationActive(state) {
   return state.pandemic.isSimulationActive;
+}
+
+export function getIsAutoPlayActive(state) {
+  return state.pandemic.isAutoPlayActive;
 }
 
 export function simulatePandemicEpic(action$, state$) {
   return action$.pipe(
-    filter(action => action.type === SET_SIMULATION_ACTIVE),
+    filter(action => action.type === SET_SIMULATION_ACTIVE || action.type === SET_AUTO_PLAY_ACTIVE),
     switchMap(() => {
-      const isActive = getIsSimulationAction(state$.value);
+      const isActive = getIsSimulationActive(state$.value);
       if (isActive) {
         return interval(150).pipe(
           map(() => {
