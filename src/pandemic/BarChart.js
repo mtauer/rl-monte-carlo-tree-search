@@ -37,14 +37,14 @@ const BarChart = ({
   values,
   color,
   size,
+  offset,
   formatFunc,
 }) => {
-  const maxValue = max(values);
-  console.log(size);
+  const maxValue = max(values) - offset;
   return (
     <Chart size={size}>
       { values.map((v, i) => {
-        const barWidth = v === undefined || v < 0 ? 0 : size * v / maxValue;
+        const barWidth = v === undefined || (v - offset) < 0 ? 0 : size * (v - offset) / maxValue;
         return (
           <Cell key={`next-action-bar-${i}`}>
             <CellBar style={{ width: `${barWidth}px`, backgroundColor: color }} />
@@ -61,10 +61,12 @@ BarChart.propTypes = {
   values: PropTypes.arrayOf(PropTypes.number).isRequired,
   color: PropTypes.string.isRequired,
   size: PropTypes.number,
+  offset: PropTypes.number,
   formatFunc: PropTypes.func,
 };
 BarChart.defaultProps = {
   size: 80,
+  offset: 0,
   formatFunc: v => v,
 };
 
