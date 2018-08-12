@@ -7,18 +7,15 @@ import { getGameState, getSearchTreeRoot } from './redux';
 import { Container, Title } from '../components/Page';
 import NextActionsSection from './NextActionsSection';
 
-const PandemicPage = ({ gameState, searchTreeRoot }) => {
-  console.log('Pandemic initial state', gameState);
-  return (
-    <Container>
-      <Title>Monte Carlo Tree Search for Pandemic</Title>
-      <NextActionsSection gameResult={searchTreeRoot} />
-    </Container>
-  );
-};
+const PandemicPage = ({ searchTreeRoot }) => (
+  <Container>
+    <Title>Monte Carlo Tree Search for Pandemic</Title>
+    <NextActionsSection gameResult={searchTreeRoot} />
+  </Container>
+);
 PandemicPage.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  gameState: PropTypes.object.isRequired,
+  // gameState: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   searchTreeRoot: PropTypes.object,
 };

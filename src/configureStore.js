@@ -4,7 +4,7 @@ import { routerMiddleware, connectRouter } from 'connected-react-router';
 import createHistory from 'history/createBrowserHistory';
 
 import connectFourReducer from './connectFour/redux';
-import pandemicReducer from './pandemic/redux';
+import pandemicReducer, { simulatePandemicEpic } from './pandemic/redux';
 
 export const history = createHistory();
 const rootReducer = combineReducers({
@@ -21,6 +21,7 @@ const store = createStore(
 epicMiddleware.run(combineEpics(
   // TODO Enable Connect 4 simulation again
   // simulateConnectFourEpic,
+  simulatePandemicEpic,
 ));
 
 export default store;

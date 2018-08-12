@@ -22,7 +22,7 @@ const initialState = {
   searchTreeRoot: null,
 };
 
-const PREFIX = 'monteCarloTreeSearch/';
+const PREFIX = 'connectFour/';
 export const SET_SEARCH_TREE_ROOT = `${PREFIX}SET_SEARCH_TREE_ROOT`;
 export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`; // with action we mean a game/MDP action
 
