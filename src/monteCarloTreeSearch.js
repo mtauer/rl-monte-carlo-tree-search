@@ -29,11 +29,11 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
     const rolloutValue = getRolloutValue(game, currentNode.state);
     // 4. Back propagation
     backPropagateValue(currentNode, rolloutValue);
-    calculateUCB1Values(
-      root,
-      undefined,
-      options.ucb1WithMinMax && state.currentPlayer === game.O,
-    );
+    if (options.ucb1WithMinMax) {
+      calculateUCB1Values(root, undefined, state.currentPlayer === game.O);
+    } else {
+      calculateUCB1Values(root);
+    }
   }
   return root;
 }
@@ -97,12 +97,17 @@ function calculateUCB1Values(node, root = node, maximize = true) {
     const n = node.deepCount; // total number of subtree value estimations
     const N = root.deepCount; // total number of all value estimations
     const c = options.ucb1ExplorationParameter; // exploration parameter
-    const meanV = options.ucb1WithMinMax && maximize
-      ? v / n : 1 - v / n; // average subtree value estimation
+    const meanV = maximize ? v / n : 1 - v / n; // average subtree value estimation
     const ucb1 = meanV + c * Math.sqrt(Math.log(N) / n);
     node.ucb1 = ucb1;
   }
-  node.children.forEach((child) => { calculateUCB1Values(child, root, !maximize); });
+  node.children.forEach((child) => {
+    if (options.ucb1WithMinMax) {
+      calculateUCB1Values(child, root, !maximize);
+    } else {
+      calculateUCB1Values(child, root);
+    }
+  });
 }
 
 class MonteCarloTreeSearchNode {
