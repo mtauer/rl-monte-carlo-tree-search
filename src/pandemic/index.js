@@ -16,21 +16,21 @@ import {
   diseases, locations, routes, outbreaks,
 } from './constants';
 
-const DO_NOTHING = 'DO_NOTHING';
-const DRIVE_FERRY = 'DRIVE_FERRY';
-const DIRECT_FLIGHT = 'DIRECT_FLIGHT';
-const CHARTER_FLIGHT = 'CHARTER_FLIGHT';
-const SHUTTLE_FLIGHT = 'SHUTTLE_FLIGHT';
-const BUILD_RESEARCH_CENTER = 'BUILD_RESEARCH_CENTER';
-const DISCOVER_CURE = 'DISCOVER_CURE';
-const TREAT_DISEASE = 'TREAT_DISEASE';
-const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
+export const DO_NOTHING = 'DO_NOTHING';
+export const DRIVE_FERRY = 'DRIVE_FERRY';
+export const DIRECT_FLIGHT = 'DIRECT_FLIGHT';
+export const CHARTER_FLIGHT = 'CHARTER_FLIGHT';
+export const SHUTTLE_FLIGHT = 'SHUTTLE_FLIGHT';
+export const BUILD_RESEARCH_CENTER = 'BUILD_RESEARCH_CENTER';
+export const DISCOVER_CURE = 'DISCOVER_CURE';
+export const TREAT_DISEASE = 'TREAT_DISEASE';
+export const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
 
-const PLAYERS = 'PLAYERS';
-const BOARD = 'BOARD';
+export const PLAYERS = 'PLAYERS';
+export const BOARD = 'BOARD';
 
-const DISEASE_CURED = 'DISEASE_CURED';
-// const DISEASE_ERADICATED = 'DISEASE_ERADICATED';
+export const DISEASE_CURED = 'DISEASE_CURED';
+// export const DISEASE_ERADICATED = 'DISEASE_ERADICATED';
 
 export const locationsMap = getLocationsMap();
 export const players = getPlayers();
