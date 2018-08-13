@@ -4,6 +4,7 @@
   "rules": {
     "no-use-before-define": 0,
     "react/jsx-one-expression-per-line": 0,
+    "object-curly-newline": [0, { "ImportDeclaration": "never" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   },
   "env": {
