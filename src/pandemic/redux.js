@@ -6,7 +6,7 @@ import maxBy from 'lodash/maxBy';
 import initialGameState from './initialState.json';
 
 import * as pandemic from '.';
-import monteCarloTreeSearch from '../monteCarloTreeSearch';
+import monteCarloTreeSearchND from '../monteCarloTreeSearchND';
 
 const initialState = {
   gameState: initialGameState,
@@ -125,7 +125,7 @@ export function simulatePandemicEpic(action$, state$) {
               return setSimulationActiveAction(false);
             }
             const searchTreeRoot = getSearchTreeRoot(state$.value);
-            const root = monteCarloTreeSearch(pandemic, gameState, searchTreeRoot);
+            const root = monteCarloTreeSearchND(pandemic, gameState, searchTreeRoot);
             return setSearchTreeRootAction(cloneDeep(root));
           }),
         );
@@ -154,7 +154,7 @@ export function autoPlayPandemicEpic(action$, state$) {
               const nextActionNode = maxBy(searchTreeRoot.children, c => c.deepValue / c.deepCount);
               return performGameActionAction(nextActionNode.action);
             }
-            const root = monteCarloTreeSearch(pandemic, gameState, searchTreeRoot);
+            const root = monteCarloTreeSearchND(pandemic, gameState, searchTreeRoot);
             return setSearchTreeRootAction(cloneDeep(root));
           }),
           startWith(setAutoPlayStartTime()),
