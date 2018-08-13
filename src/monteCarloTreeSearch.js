@@ -20,19 +20,19 @@ export default function monteCarloTreeSearch(game, state, initialRoot) {
   if (initialRoot) {
     root = initialRoot;
   } else {
-    root = new MonteCarloTreeSearchNode(null);
+    root = new MonteCarloTreeSearchNode(null, state);
     root.setChildren(getNewNodes(game, state));
   }
   while ((performance.now() - startTime) < options.learningTimeInMs) {
-    let currentNodeAndState = { node: root, state };
+    let currentNode;
     // 1. Tree traversal
-    currentNodeAndState = traverseTree(game, currentNodeAndState);
+    currentNode = traverseTree(root);
     // 2. Node expansion
-    currentNodeAndState = expandNode(game, currentNodeAndState);
+    currentNode = expandNode(game, currentNode);
     // 3. Rollout
-    const rolloutValue = getRolloutValue(game, currentNodeAndState.state);
+    const rolloutValue = getRolloutValue(game, currentNode.state);
     // 4. Back propagation
-    backPropagateValue(rolloutValue, currentNodeAndState.node);
+    backPropagateValue(currentNode, rolloutValue);
     if (options.ucb1WithMinMax) {
       calculateUCB1Values(root, undefined, state.currentPlayer === game.O);
     } else {
@@ -50,32 +50,29 @@ export function monteCarloTreeSearchPerformAction(initialRoot, action) {
   ) || null;
 }
 
-function traverseTree(game, { node, state }) {
-  if (node.isLeaf()) { return { node, state }; }
-  const nextNode = maxBy(node.children, (n => n.ucb1));
-  const nextState = game.performAction(state, nextNode.action);
-  return traverseTree(game, { node: nextNode, state: nextState });
+function traverseTree(node) {
+  if (node.isLeaf()) { return node; }
+  return traverseTree(maxBy(node.children, (n => n.ucb1)));
 }
 
-function expandNode(game, { node, state }) {
-  if (node.deepCount === 0) { return { node, state }; }
+function expandNode(game, node) {
+  if (node.deepCount === 0) { return node; }
 
-  const newNodes = getNewNodes(game, state);
+  const newNodes = getNewNodes(game, node.state);
   if (isEmpty(newNodes)) {
     node.isFinished = true;
-    return { node, state };
+    return node;
   }
 
   node.setChildren(newNodes);
-  const nextNode = sample(node.children);
-  const nextState = game.performAction(state, nextNode.action);
-  return { node: nextNode, state: nextState };
+  return sample(node.children);
 }
 
 function getNewNodes(game, state) {
   const validActions = game.getValidActions(state);
   const newNodes = validActions.map(action => new MonteCarloTreeSearchNode(
     action,
+    game.performAction(state, action),
   ));
   return newNodes;
 }
@@ -87,10 +84,10 @@ function getRolloutValue(game, state) {
   return getRolloutValue(game, nextState);
 }
 
-function backPropagateValue(value, node) {
+function backPropagateValue(node, value) {
   node.deepValue += value;
   node.deepCount += 1;
-  if (node.parent) { backPropagateValue(value, node.parent); }
+  if (node.parent) { backPropagateValue(node.parent, value); }
 }
 
 function calculateUCB1Values(node, root = node, maximize = true) {
@@ -118,7 +115,7 @@ function calculateUCB1Values(node, root = node, maximize = true) {
 }
 
 class MonteCarloTreeSearchNode {
-  constructor(action) {
+  constructor(action, state) {
     this.parent = null;
     this.children = [];
     this.deepValue = 0;
@@ -126,6 +123,7 @@ class MonteCarloTreeSearchNode {
     this.ucb1 = Number.POSITIVE_INFINITY;
     this.isFinished = false;
     this.action = action;
+    this.state = state;
   }
 
   isLeaf() {
