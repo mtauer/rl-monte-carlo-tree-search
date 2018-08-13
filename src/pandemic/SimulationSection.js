@@ -9,7 +9,7 @@ import {
 } from './redux';
 
 import {
-  Section, SectionTitle, Row, Column, Button,
+  Section, Label, Row, Column, Button,
 } from '../components/Page';
 
 const ButtonSpacing = styled.div`
@@ -27,7 +27,7 @@ const SimulationSection = ({
   <Section>
     <Row>
       <Column>
-        <SectionTitle>Simulation</SectionTitle>
+        <Label>Simulation</Label>
         <Row>
           <ButtonSpacing>
             <Button onClick={onSimulationStartClick} disabled={isSimulationActive}>Start</Button>
@@ -38,7 +38,7 @@ const SimulationSection = ({
         </Row>
       </Column>
       <Column>
-        <SectionTitle>Automatic Play</SectionTitle>
+        <Label>Automatic Play</Label>
         <Row>
           <ButtonSpacing>
             <Button onClick={onAutoPlayStartClick} disabled={isAutoPlayActive}>Start</Button>

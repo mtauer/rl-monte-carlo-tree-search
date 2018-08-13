@@ -32,7 +32,7 @@ export const Column = styled.div`
 `;
 export const SectionTitle = styled.h2`
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 21px;
+  font-size: 18px;
   margin: 0;
   padding: 0 0 8px 0;
 `;
