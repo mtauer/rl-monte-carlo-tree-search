@@ -207,19 +207,21 @@ export function getValidActions(state = initialState) {
   }
   // DISCOVER_CURE
   const cardsByDisease = groupBy(cards, (c => locationsMap[c].disease));
-  actions.push(
-    toPairs(cardsByDisease)
-      .filter(pair => pair[1].length >= 5)
-      .map((pair) => {
-        const usedCards = take(pair[1], 5);
-        return {
-          type: DISCOVER_CURE,
-          player: currentPlayer,
-          disease: pair[0],
-          usedCards,
-        };
-      }),
-  );
+  if (includes(researchCenters, location.id)) {
+    actions.push(
+      toPairs(cardsByDisease)
+        .filter(pair => pair[1].length >= 5)
+        .map((pair) => {
+          const usedCards = take(pair[1], 5);
+          return {
+            type: DISCOVER_CURE,
+            player: currentPlayer,
+            disease: pair[0],
+            usedCards,
+          };
+        }),
+    );
+  }
   // TREAT_DISEASE
   if (infections[location.id]) {
     actions.push(
