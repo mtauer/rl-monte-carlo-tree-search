@@ -25,6 +25,7 @@ export const BUILD_RESEARCH_CENTER = 'BUILD_RESEARCH_CENTER';
 export const DISCOVER_CURE = 'DISCOVER_CURE';
 export const TREAT_DISEASE = 'TREAT_DISEASE';
 export const SHARE_KNOWLEDGE = 'SHARE_KNOWLEDGE';
+export const DISCARD_CARD = 'DISCARD_CARD';
 
 export const PLAYERS = 'PLAYERS';
 export const BOARD = 'BOARD';
@@ -151,9 +152,24 @@ export function getValidActions(state = initialState) {
   const {
     currentPlayer, playerPosition, playerCards, researchCenters, infections,
   } = state;
+  const actions = [];
+
+  // Immediate actions
+  toPairs(playerCards).forEach(([player, cards]) => {
+    if (cards.length > 7) {
+      actions.push(cards.map(card => ({
+        type: DISCARD_CARD,
+        player,
+        card,
+      })));
+    }
+  });
+  if (actions.length > 0) {
+    return flatten(actions);
+  }
+
   const location = locationsMap[playerPosition[currentPlayer]];
   const cards = playerCards[currentPlayer];
-  const actions = [];
   // DRIVE_FERRY
   actions.push(location.connectedLocations.map(id => ({
     type: DRIVE_FERRY,
@@ -334,6 +350,11 @@ export function performAction(state = initialState, action) {
       newState.currentMovesCount -= 1;
       newState.playerCards[from] = newState.playerCards[from].filter(id => id !== card);
       newState.playerCards[to] = [...playerCards[to], card];
+      break;
+    }
+    case DISCARD_CARD: {
+      const { card } = action;
+      newState.playerCards[player] = newState.playerCards[player].filter(c => c !== card);
       break;
     }
     default:

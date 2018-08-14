@@ -11,7 +11,7 @@ import { interpolateHcl } from 'd3-interpolate';
 import {
   locationsMap, DRIVE_FERRY, DIRECT_FLIGHT, CHARTER_FLIGHT, SHUTTLE_FLIGHT,
   BUILD_RESEARCH_CENTER, TREAT_DISEASE, DISCOVER_CURE, SHARE_KNOWLEDGE,
-  DO_NOTHING,
+  DO_NOTHING, DISCARD_CARD,
 } from '.';
 import {
   DISEASE_YELLOW, DISEASE_RED, DISEASE_BLUE, DISEASE_BLACK,
@@ -141,6 +141,7 @@ function formatActionType(type) {
     case DISCOVER_CURE: return 'Discover Cure';
     case SHARE_KNOWLEDGE: return 'Share Knowledge';
     case DO_NOTHING: return 'Do Nothing';
+    case DISCARD_CARD: return 'Discard Card';
     default: return type;
   }
 }
@@ -262,6 +263,18 @@ function formatActionDetails(action) {
         <Property key="to">
           <PropertyName>To Player:</PropertyName>
           <PropertyValue>{action.to}</PropertyValue>
+        </Property>,
+      ];
+    }
+    case DISCARD_CARD: {
+      return [
+        <Property key="player">
+          <PropertyName>Player:</PropertyName>
+          <PropertyValue>{action.player}</PropertyValue>
+        </Property>,
+        <Property key="card">
+          <PropertyName>Card:</PropertyName>
+          <PropertyValue><Location locationId={action.card} /></PropertyValue>
         </Property>,
       ];
     }
