@@ -7,7 +7,7 @@ import { Route, Switch, Redirect } from 'react-router';
 import store, { history } from './configureStore';
 import registerServiceWorker from './registerServiceWorker';
 import ConnectFourPage from './connectFour/ConnectFourPage';
-import PandamicPage from './pandemic/PandemicPage';
+import PandemicPage from './pandemic/PandemicPage';
 import './index.css';
 
 const target = document.getElementById('root');
@@ -20,7 +20,7 @@ ReactDOM.render(
           <Redirect to="/connect-4" />
         </Route>
         <Route exact path="/connect-4" component={ConnectFourPage} />
-        <Route exact path="/pandamic" component={PandamicPage} />
+        <Route exact path="/pandemic" component={PandemicPage} />
       </Switch>
     </ConnectedRouter>
   </Provider>,
