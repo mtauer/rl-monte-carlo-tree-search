@@ -14,6 +14,8 @@ const initialState = {
   isSimulationActive: false,
   isAutoPlayActive: false,
   autoPlayStartTime: 0,
+  gameNumber: 0,
+  gameMoves: [],
 };
 
 const PREFIX = 'pandemic/';
@@ -22,6 +24,7 @@ export const PERFORM_GAME_ACTION = `${PREFIX}PERFORM_GAME_ACTION`;
 export const SET_SIMULATION_ACTIVE = `${PREFIX}SET_SIMULATION_ACTIVE`;
 export const SET_AUTO_PLAY_ACTIVE = `${PREFIX}SET_AUTO_PLAY_ACTIVE`;
 export const SET_AUTO_PLAY_START_TIME = `${PREFIX}SET_AUTO_PLAY_START_TIME`;
+export const AUTO_PLAY_NEW_GAME = `${PREFIX}AUTO_PLAY_NEW_GAME`;
 
 export function setSearchTreeRootAction(searchTreeRoot) {
   return { type: SET_SEARCH_TREE_ROOT, searchTreeRoot };
@@ -43,6 +46,10 @@ export function setAutoPlayStartTime() {
   return { type: SET_AUTO_PLAY_START_TIME };
 }
 
+export function autoPlayNewGameAction() {
+  return { type: AUTO_PLAY_NEW_GAME };
+}
+
 export default function pandemicReducer(state = initialState, action) {
   switch (action.type) {
     case SET_SEARCH_TREE_ROOT: {
@@ -53,9 +60,14 @@ export default function pandemicReducer(state = initialState, action) {
       };
     }
     case PERFORM_GAME_ACTION: {
-      const { gameState } = state;
+      const { gameState, gameNumber } = state;
       const { gameAction } = action;
       const newGameState = pandemic.performAction(gameState, gameAction);
+      const winner = pandemic.getWinner(newGameState);
+      if (winner) {
+        console.log('+++ Winner:', winner);
+      }
+      const newGameMoves = { gameNumber, gameAction, winner };
       // TODO Investigate if and how monteCarloTreeSearchPerformAction could be
       // used for non-deterministic MDPs.
       const newSearchTreeRoot = null;
@@ -64,6 +76,7 @@ export default function pandemicReducer(state = initialState, action) {
         gameState: newGameState,
         searchTreeRoot: newSearchTreeRoot,
         autoPlayStartTime: performance.now(),
+        gameMoves: [...state.gameMoves, newGameMoves],
       };
     }
     case SET_SIMULATION_ACTIVE: {
@@ -86,6 +99,16 @@ export default function pandemicReducer(state = initialState, action) {
       return {
         ...state,
         autoPlayStartTime: performance.now(),
+      };
+    }
+    case AUTO_PLAY_NEW_GAME: {
+      console.log(JSON.stringify(state.gameMoves, null, 2));
+      return {
+        ...state,
+        gameNumber: state.gameNumber + 1,
+        autoPlayStartTime: performance.now(),
+        gameState: initialState.gameState,
+        searchTreeRoot: initialState.searchTreeRoot,
       };
     }
     default: return state;
@@ -148,7 +171,7 @@ export function autoPlayPandemicEpic(action$, state$) {
             const searchTreeRoot = getSearchTreeRoot(state$.value);
             const gameState = getGameState(state$.value);
             if (pandemic.isFinished(gameState)) {
-              return setAutoPlayActiveAction(false);
+              return autoPlayNewGameAction();
             }
             if (time > startTime + 60 * 1000) {
               const nextActionNode = maxBy(searchTreeRoot.children, c => c.deepValue / c.deepCount);
