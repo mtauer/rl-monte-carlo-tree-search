@@ -1,0 +1,408 @@
+[
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 3,
+      "to": 37,
+      "card": 37
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 37,
+      "to": 38
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 38,
+      "to": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "TREAT_DISEASE",
+      "player": 0,
+      "disease": "Blue",
+      "at": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 1,
+      "from": 3,
+      "to": 42,
+      "card": 42
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 1,
+      "from": 42,
+      "to": 28,
+      "card": 28
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 28,
+      "to": 25
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 25,
+      "to": 22
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 3,
+      "to": 38
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 38,
+      "to": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 3,
+      "to": 38
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 38,
+      "to": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 22,
+      "to": 20
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 20,
+      "to": 22
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 22,
+      "to": 20
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 20,
+      "to": 18
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 3,
+      "to": 1
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 1,
+      "to": 45,
+      "card": 45
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 45,
+      "to": 47
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 47,
+      "to": 3,
+      "card": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 1,
+      "from": 18,
+      "to": 13,
+      "card": 13
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 13,
+      "to": 12
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 1,
+      "from": 12,
+      "to": 1,
+      "card": 1
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 1,
+      "to": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 3,
+      "to": 18,
+      "card": 18
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 18,
+      "to": 14,
+      "card": 14
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 14,
+      "to": 13
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 13,
+      "to": 45
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 3,
+      "to": 38
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 38,
+      "to": 5
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 5,
+      "to": 38
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 1,
+      "from": 38,
+      "to": 3
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DISCARD_CARD",
+      "player": "1",
+      "card": 41
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DISCARD_CARD",
+      "player": "1",
+      "card": 2
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 45,
+      "to": 22,
+      "card": 22
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DRIVE_FERRY",
+      "player": 0,
+      "from": 22,
+      "to": 23
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "CHARTER_FLIGHT",
+      "player": 0,
+      "from": 23,
+      "to": 25,
+      "card": 23
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DIRECT_FLIGHT",
+      "player": 0,
+      "from": 25,
+      "to": 30,
+      "card": 30
+    },
+    "winner": null
+  },
+  {
+    "gameNumber": 0,
+    "gameAction": {
+      "type": "DISCOVER_CURE",
+      "player": 1,
+      "disease": "Red",
+      "usedCards": [
+        29,
+        33,
+        34,
+        35,
+        27
+      ]
+    },
+    "winner": "PLAYERS"
+  }
+]
