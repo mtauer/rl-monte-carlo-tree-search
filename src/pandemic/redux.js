@@ -6,7 +6,8 @@ import maxBy from 'lodash/maxBy';
 import initialGameState from './initialState.json';
 
 import * as pandemic from '.';
-import monteCarloTreeSearchND from '../monteCarloTreeSearchND';
+import monteCarloTreeSearchND, { monteCarloTreeSearchNDPerformAction } from '../monteCarloTreeSearchND';
+
 
 const initialState = {
   gameState: initialGameState,
@@ -60,7 +61,7 @@ export default function pandemicReducer(state = initialState, action) {
       };
     }
     case PERFORM_GAME_ACTION: {
-      const { gameState, gameNumber } = state;
+      const { gameState, searchTreeRoot, gameNumber } = state;
       const { gameAction } = action;
       const newGameState = pandemic.performAction(gameState, gameAction);
       const winner = pandemic.getWinner(newGameState);
@@ -68,9 +69,8 @@ export default function pandemicReducer(state = initialState, action) {
         console.log('+++ Winner:', winner);
       }
       const newGameMoves = { gameNumber, gameAction, winner };
-      // TODO Investigate if and how monteCarloTreeSearchPerformAction could be
-      // used for non-deterministic MDPs.
-      const newSearchTreeRoot = null;
+      const newSearchTreeRoot = monteCarloTreeSearchNDPerformAction(searchTreeRoot, gameAction);
+
       return {
         ...state,
         gameState: newGameState,

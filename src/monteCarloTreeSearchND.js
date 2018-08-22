@@ -43,7 +43,7 @@ export default function monteCarloTreeSearchND(game, state, initialRoot) {
   return root;
 }
 
-export function monteCarloTreeSearchPerformAction(initialRoot, action) {
+export function monteCarloTreeSearchNDPerformAction(initialRoot, action) {
   if (!initialRoot || !initialRoot.children) { return null; }
   return first(
     initialRoot.children
